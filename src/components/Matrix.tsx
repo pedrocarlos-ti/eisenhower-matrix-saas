@@ -55,20 +55,32 @@ const Matrix: React.FC<MatrixProps> = ({
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-6">
+    <div className="w-full">
       {/* Axis Labels */}
-      <div className="mb-6 text-center">
-        <div className="inline-flex items-center space-x-8 text-sm text-gray-600">
-          <span className="font-medium">← Not Urgent</span>
-          <span className="text-gray-400">|</span>
-          <span className="font-medium">Urgent →</span>
+      <div className="mb-6 sm:mb-8 text-center">
+        <div className="card inline-flex items-center space-x-4 sm:space-x-8 text-xs sm:text-sm text-slate-700 px-4 sm:px-8 py-3 sm:py-4 shadow-md">
+          <span className="font-semibold flex items-center">
+            <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+            </svg>
+            <span className="hidden sm:inline">Not Urgent</span>
+            <span className="sm:hidden">Not Urgent</span>
+          </span>
+          <span className="text-slate-400">|</span>
+          <span className="font-semibold flex items-center">
+            <span className="hidden sm:inline">Urgent</span>
+            <span className="sm:hidden">Urgent</span>
+            <svg className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
         </div>
-        <div className="mt-2 text-xs text-gray-500">
-          Use the matrix below to categorize tasks by urgency and importance
+        <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-slate-600 font-medium px-4 sm:px-0">
+          Categorize your tasks using the proven Eisenhower Decision Matrix
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         {quadrantConfigs.map((config) => (
           <Quadrant
             key={config.id}
