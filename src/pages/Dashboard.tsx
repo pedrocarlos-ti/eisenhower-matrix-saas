@@ -9,6 +9,7 @@ import { Input } from '../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import ProUpgradePrompt from '../components/ProUpgradePrompt';
 import UserProfile from '../components/UserProfile';
+import TaskForm from '../components/TaskForm';
 
 const Dashboard: React.FC = () => {
   const { user, logout, upgradeAccount } = useAuth();
@@ -17,6 +18,7 @@ const Dashboard: React.FC = () => {
   const [isFormOpen, setIsFormOpen] = useState(false); // Used when adding/editing tasks
   const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
+  const [currentQuadrant, setCurrentQuadrant] = useState<QuadrantType>('urgent-important');
   const [searchTerm, setSearchTerm] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [showCompleted, setShowCompleted] = useState(true);
@@ -38,8 +40,9 @@ const Dashboard: React.FC = () => {
 
   // Task handlers
   const handleAddTask = (quadrant: QuadrantType) => {
-    // Store the quadrant in the current task or in a separate state if needed
+    // Store the quadrant in a separate state
     setCurrentTask(null);
+    setCurrentQuadrant(quadrant);
     setIsFormOpen(true);
   };
 
@@ -59,13 +62,24 @@ const Dashboard: React.FC = () => {
   };
 
   // Used when saving a task from the task form
-  const handleSaveTask = (task: Task) => {
+  const handleSaveTask = (taskData: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (currentTask) {
       // Edit existing task
-      setTasks(tasks.map(t => t.id === task.id ? task : t));
+      const updatedTask = {
+        ...currentTask,
+        ...taskData,
+        updatedAt: new Date()
+      };
+      setTasks(tasks.map(t => t.id === currentTask.id ? updatedTask : t));
     } else {
       // Add new task
-      setTasks([...tasks, task]);
+      const newTask: Task = {
+        id: `task_${Date.now()}`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        ...taskData
+      };
+      setTasks([...tasks, newTask]);
     }
     setIsFormOpen(false);
   };
@@ -175,8 +189,8 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Matrix */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Main content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Matrix 
           tasks={filteredTasks}
           onAddTask={handleAddTask}
@@ -185,7 +199,18 @@ const Dashboard: React.FC = () => {
           onMoveTask={handleMoveTask}
           onToggleComplete={handleToggleComplete}
         />
-      </div>
+        
+        {/* Task Form Modal */}
+        {isFormOpen && (
+          <TaskForm
+            isOpen={isFormOpen}
+            onClose={() => setIsFormOpen(false)}
+            onSave={handleSaveTask}
+            initialTask={currentTask}
+            initialQuadrant={currentQuadrant}
+          />
+        )}
+      </main>
 
       {/* Pro upgrade banner (for free users) */}
       {isFreePlan && (

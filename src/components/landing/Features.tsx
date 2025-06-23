@@ -62,7 +62,7 @@ const Features: React.FC = () => {
     <div id="features" className="py-24 bg-white">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-base font-semibold leading-7 text-indigo-600">Powerful Features</h2>
+          <h2 className="text-base font-semibold leading-7 text-primary">Powerful Features</h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Everything you need to master your productivity
           </p>
@@ -71,12 +71,41 @@ const Features: React.FC = () => {
           </p>
         </div>
         
+        {/* Feature Highlights with Images */}
+        <div className="mt-16 grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-3">
+          <div className="card overflow-hidden transition-all duration-300">
+            <div className="p-6">
+              <img src="/feature-1.svg" alt="Eisenhower Matrix" className="w-full h-auto rounded-lg shadow mb-6" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Intuitive Matrix Layout</h3>
+              <p className="text-gray-600">Organize tasks in our beautifully designed four-quadrant system based on urgency and importance.</p>
+            </div>
+          </div>
+          
+          <div className="card overflow-hidden transition-all duration-300">
+            <div className="p-6">
+              <img src="/feature-2.svg" alt="Task Management" className="w-full h-auto rounded-lg shadow mb-6" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Smart Task Management</h3>
+              <p className="text-gray-600">Create, edit, and track tasks with ease. Set priorities, due dates, and mark tasks as complete.</p>
+            </div>
+          </div>
+          
+          <div className="card overflow-hidden transition-all duration-300">
+            <div className="p-6">
+              <img src="/feature-3.svg" alt="Productivity Analytics" className="w-full h-auto rounded-lg shadow mb-6" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Productivity Analytics</h3>
+              <p className="text-gray-600">Gain insights into your productivity patterns with detailed reports and visualizations.</p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Feature List */}
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+          <h3 className="text-2xl font-bold text-center mb-12">More Powerful Features</h3>
           <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
             {features.map((feature, index) => (
               <div key={index} className="flex flex-col">
                 <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <div className="h-10 w-10 flex-none rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                  <div className="h-10 w-10 flex-none rounded-lg bg-primary-light text-primary flex items-center justify-center">
                     {feature.icon}
                   </div>
                   {feature.title}
