@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Task, QuadrantType, PriorityLevel } from './types';
 import { loadTasks, saveTasks, generateId } from './utils/localStorage';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import Matrix from './components/Matrix';
 import TaskForm from './components/TaskForm';
 import SearchBar from './components/SearchBar';
@@ -111,62 +113,66 @@ const App: React.FC = () => {
   }).length;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="glass-effect border-b border-white/20 shadow-modern">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          <div className="flex flex-col space-y-6 lg:space-y-0 lg:flex-row lg:justify-between lg:items-center mb-6 sm:mb-8">
-            <div className="flex items-center space-x-3 sm:space-x-4">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <header className="border-b bg-card">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+          <div className="flex flex-col space-y-6 lg:space-y-0 lg:flex-row lg:justify-between lg:items-center">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold gradient-text">Priority Matrix</h1>
-                <p className="text-slate-600 text-xs sm:text-sm font-medium hidden sm:block">Master your productivity with the Eisenhower Method</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Eisenhower Matrix</h1>
+                <p className="text-muted-foreground text-sm hidden sm:block">Organize tasks by urgency and importance</p>
               </div>
             </div>
             
             <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-4">
-              <div className="flex space-x-3">
-                <button
+              <div className="flex space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => setShowStats(!showStats)}
-                  className="btn-secondary text-sm flex-1 sm:flex-none justify-center sm:justify-start relative"
+                  className="relative"
                 >
-                  <svg className="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
-                  <span className="sm:hidden">Analytics</span>
-                  <span className="hidden sm:inline">{showStats ? 'Hide Analytics' : 'View Analytics'}</span>
-                  <ProBadge variant="small" className="absolute -top-1 -right-1" />
-                </button>
+                  <span className="hidden sm:inline">{showStats ? 'Hide Analytics' : 'Analytics'}</span>
+                  <span className="sm:hidden">Stats</span>
+                  <Badge variant="secondary" className="absolute -top-2 -right-2 px-1 text-xs">PRO</Badge>
+                </Button>
                 
                 <ExportMenu tasks={tasks} />
               </div>
               
-              <div className="flex space-x-3 overflow-x-auto pb-2 sm:pb-0">
-                <div className="card px-4 sm:px-5 py-3 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100 min-w-0 flex-shrink-0">
-                  <div className="text-xs text-blue-600 font-semibold uppercase tracking-wide">Total</div>
-                  <div className="text-xl sm:text-2xl font-bold text-blue-700">{totalTasks}</div>
+              <div className="flex space-x-3">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-foreground">{totalTasks}</div>
+                  <div className="text-xs text-muted-foreground">Total Tasks</div>
                 </div>
-                <div className="card px-4 sm:px-5 py-3 bg-gradient-to-br from-emerald-50 to-green-50 border-emerald-100 min-w-0 flex-shrink-0">
-                  <div className="text-xs text-emerald-600 font-semibold uppercase tracking-wide">Today</div>
-                  <div className="text-xl sm:text-2xl font-bold text-emerald-700">{todaysTasks}</div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-foreground">{todaysTasks}</div>
+                  <div className="text-xs text-muted-foreground">Today</div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Search and Filters */}
-          <SearchBar
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            filterPriority={filterPriority}
-            onFilterChange={setFilterPriority}
-            showCompleted={showCompleted}
-            onToggleCompleted={setShowCompleted}
-          />
+          <div className="mt-6">
+            <SearchBar
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              filterPriority={filterPriority}
+              onFilterChange={setFilterPriority}
+              showCompleted={showCompleted}
+              onToggleCompleted={setShowCompleted}
+            />
+          </div>
         </div>
       </header>
 

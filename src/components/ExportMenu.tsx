@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Task } from '../types';
+import { Button } from '@/components/ui/button';
 
 interface ExportMenuProps {
   tasks: Task[];
@@ -231,18 +232,19 @@ const ExportMenu: React.FC<ExportMenuProps> = ({ tasks }) => {
 
   return (
     <div className="relative">
-      <button
+      <Button
+        variant="outline"
+        size="sm"
         onClick={() => setIsOpen(!isOpen)}
-        className="btn-secondary text-sm flex items-center space-x-2"
       >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <span>Export</span>
-        <svg className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        Export
+        <svg className={`w-3 h-3 ml-2 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
         </svg>
-      </button>
+      </Button>
 
       {isOpen && (
         <>
@@ -250,30 +252,30 @@ const ExportMenu: React.FC<ExportMenuProps> = ({ tasks }) => {
             className="fixed inset-0 z-10" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-200 z-20 overflow-hidden">
+          <div className="absolute right-0 top-full mt-2 w-48 bg-card rounded-lg shadow-lg border z-20 overflow-hidden">
             <button
               onClick={exportToCSV}
-              className="w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors flex items-center space-x-3 border-b border-slate-100"
+              className="w-full px-4 py-3 text-left hover:bg-accent transition-colors flex items-center space-x-3 border-b"
             >
               <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               <div>
-                <div className="font-medium text-slate-900">Export to CSV</div>
-                <div className="text-xs text-slate-500">Spreadsheet format</div>
+                <div className="font-medium text-foreground">Export to CSV</div>
+                <div className="text-xs text-muted-foreground">Spreadsheet format</div>
               </div>
             </button>
             
             <button
               onClick={exportToPDF}
-              className="w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors flex items-center space-x-3"
+              className="w-full px-4 py-3 text-left hover:bg-accent transition-colors flex items-center space-x-3"
             >
               <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               <div>
-                <div className="font-medium text-slate-900">Export to PDF</div>
-                <div className="text-xs text-slate-500">Print-ready format</div>
+                <div className="font-medium text-foreground">Export to PDF</div>
+                <div className="text-xs text-muted-foreground">Print-ready format</div>
               </div>
             </button>
           </div>
