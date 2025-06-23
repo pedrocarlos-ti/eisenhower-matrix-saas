@@ -1,17 +1,16 @@
 import React from 'react';
-import { Task, QuadrantConfig } from '../types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Task, QuadrantConfig, QuadrantType } from '../types';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
 import TaskItem from './TaskItem';
 
 interface QuadrantProps {
   config: QuadrantConfig;
   tasks: Task[];
-  onAddTask: (quadrant: string) => void;
+  onAddTask: (quadrant: QuadrantType) => void;
   onEditTask: (task: Task) => void;
   onDeleteTask: (taskId: string) => void;
-  onMoveTask: (taskId: string, newQuadrant: string) => void;
+  onMoveTask: (taskId: string, newQuadrant: QuadrantType) => void;
   onToggleComplete: (taskId: string) => void;
 }
 
@@ -37,7 +36,7 @@ const Quadrant: React.FC<QuadrantProps> = ({
   const completedTasks = tasks.filter(task => task.completed).length;
   const activeTasks = tasks.length - completedTasks;
 
-  const getQuadrantColor = (quadrant: string) => {
+  const getQuadrantColor = (quadrant: QuadrantType) => {
     switch (quadrant) {
       case 'urgent-important':
         return 'border-red-300 bg-gradient-to-br from-red-50 via-rose-50 to-pink-50';
@@ -52,7 +51,7 @@ const Quadrant: React.FC<QuadrantProps> = ({
     }
   };
 
-  const getIndicatorColor = (quadrant: string) => {
+  const getIndicatorColor = (quadrant: QuadrantType) => {
     switch (quadrant) {
       case 'urgent-important':
         return 'bg-gradient-to-r from-red-500 to-rose-500';
@@ -67,7 +66,7 @@ const Quadrant: React.FC<QuadrantProps> = ({
     }
   };
 
-  const getQuadrantEmoji = (quadrant: string) => {
+  const getQuadrantEmoji = (quadrant: QuadrantType) => {
     switch (quadrant) {
       case 'urgent-important':
         return '🔥';

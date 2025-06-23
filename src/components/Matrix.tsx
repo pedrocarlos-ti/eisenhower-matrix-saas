@@ -1,14 +1,13 @@
 import React from 'react';
-import { Task, QuadrantConfig } from '../types';
-import { Card } from '@/components/ui/card';
+import { Task, QuadrantConfig, QuadrantType } from '../types';
 import Quadrant from './Quadrant';
 
 interface MatrixProps {
   tasks: Task[];
-  onAddTask: (quadrant: string) => void;
+  onAddTask: (quadrant: QuadrantType) => void;
   onEditTask: (task: Task) => void;
   onDeleteTask: (taskId: string) => void;
-  onMoveTask: (taskId: string, newQuadrant: string) => void;
+  onMoveTask: (taskId: string, newQuadrant: QuadrantType) => void;
   onToggleComplete: (taskId: string) => void;
 }
 
@@ -51,7 +50,7 @@ const Matrix: React.FC<MatrixProps> = ({
   onMoveTask,
   onToggleComplete,
 }) => {
-  const getTasksForQuadrant = (quadrant: string) => {
+  const getTasksForQuadrant = (quadrant: QuadrantType) => {
     return tasks.filter((task) => task.quadrant === quadrant);
   };
 

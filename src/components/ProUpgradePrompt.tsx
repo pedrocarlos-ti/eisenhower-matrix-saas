@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 
 interface ProUpgradePromptProps {
   onClose?: () => void;
+  onUpgrade?: () => void;
   variant?: 'banner' | 'modal' | 'inline';
   feature?: string;
 }
 
 const ProUpgradePrompt: React.FC<ProUpgradePromptProps> = ({ 
   onClose, 
+  onUpgrade,
   variant = 'banner',
   feature 
 }) => {
@@ -98,8 +100,11 @@ const ProUpgradePrompt: React.FC<ProUpgradePromptProps> = ({
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <button className="btn-primary text-sm">
-                Upgrade Now
+              <button 
+                className="btn-primary text-sm"
+                onClick={onUpgrade}
+              >
+                Get Pro Now
               </button>
               <button 
                 onClick={handleClose}
@@ -133,7 +138,10 @@ const ProUpgradePrompt: React.FC<ProUpgradePromptProps> = ({
               {feature ? `${feature} is a Pro feature. ` : ''}
               Upgrade to unlock cloud sync, team collaboration, and advanced analytics.
             </p>
-            <button className="btn-primary">
+            <button 
+              className="btn-primary"
+              onClick={onUpgrade}
+            >
               Upgrade to Pro
             </button>
           </div>
@@ -183,7 +191,10 @@ const ProUpgradePrompt: React.FC<ProUpgradePromptProps> = ({
               <p className="text-slate-600 text-lg mb-6 font-medium">
                 Or $89/year (save 17%) 💰
               </p>
-              <button className="btn-primary-large w-full mb-4 text-xl">
+              <button 
+                className="btn-primary-large w-full mb-4 text-xl"
+                onClick={onUpgrade}
+              >
                 🚀 Start Your Pro Trial
               </button>
               <p className="text-sm text-slate-500">
