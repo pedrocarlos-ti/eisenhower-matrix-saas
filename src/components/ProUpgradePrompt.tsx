@@ -144,50 +144,50 @@ const ProUpgradePrompt: React.FC<ProUpgradePromptProps> = ({
 
   // Modal variant
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="card max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-8">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="card-gradient max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-3xl border-2 border-white/20 shadow-2xl">
+        <div className="p-10">
+          <div className="text-center mb-10">
+            <div className="w-24 h-24 bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold gradient-text mb-2">
-              Upgrade to Priority Matrix Pro
+            <h2 className="text-4xl font-bold gradient-text mb-4">
+              🚀 Upgrade to Priority Matrix Pro
             </h2>
-            <p className="text-slate-600 text-lg">
+            <p className="text-slate-600 text-xl font-medium">
               Supercharge your productivity with premium features
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-4 mb-8">
+          <div className="grid sm:grid-cols-2 gap-6 mb-10">
             {features.map((feature, index) => (
-              <div key={index} className="flex items-start space-x-3 p-4 bg-slate-50 rounded-xl">
-                <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div key={index} className="flex items-start space-x-4 p-6 bg-white/60 rounded-2xl shadow-lg border border-white/40">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
                   {feature.icon}
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-900">{feature.title}</h4>
-                  <p className="text-sm text-slate-600">{feature.description}</p>
+                  <h4 className="font-bold text-slate-900 text-lg mb-1">{feature.title}</h4>
+                  <p className="text-slate-600">{feature.description}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 mb-8 border border-indigo-100">
+          <div className="bg-gradient-to-r from-purple-100 via-pink-100 to-indigo-100 rounded-3xl p-8 mb-8 border-2 border-white/40 shadow-xl">
             <div className="text-center">
-              <div className="text-3xl font-bold text-slate-900 mb-1">
-                $9<span className="text-lg text-slate-600">/month</span>
+              <div className="text-5xl font-bold gradient-text mb-2">
+                $9<span className="text-2xl text-slate-600">/month</span>
               </div>
-              <p className="text-slate-600 mb-4">
-                Or $89/year (save 17%)
+              <p className="text-slate-600 text-lg mb-6 font-medium">
+                Or $89/year (save 17%) 💰
               </p>
-              <button className="btn-primary w-full mb-3">
-                Start Your Pro Trial
+              <button className="btn-primary-large w-full mb-4 text-xl">
+                🚀 Start Your Pro Trial
               </button>
-              <p className="text-xs text-slate-500">
-                14-day free trial • Cancel anytime • No credit card required
+              <p className="text-sm text-slate-500">
+                ✨ 14-day free trial • Cancel anytime • No credit card required
               </p>
             </div>
           </div>

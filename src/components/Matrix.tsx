@@ -58,24 +58,24 @@ const Matrix: React.FC<MatrixProps> = ({
   return (
     <div className="w-full">
       {/* Axis Labels */}
-      <div className="mb-8 text-center">
-        <Card className="inline-flex items-center space-x-8 px-6 py-4">
-          <span className="font-medium flex items-center text-sm">
-            <svg className="w-4 h-4 mr-2 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="mb-10 text-center">
+        <div className="card-gradient inline-flex items-center space-x-10 px-8 py-5 rounded-2xl">
+          <span className="font-semibold flex items-center text-base text-slate-700">
+            <svg className="w-5 h-5 mr-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
             </svg>
             Not Urgent
           </span>
-          <span className="text-muted-foreground">|</span>
-          <span className="font-medium flex items-center text-sm">
+          <div className="w-px h-8 bg-gradient-to-b from-transparent via-slate-300 to-transparent"></div>
+          <span className="font-semibold flex items-center text-base text-slate-700">
             Urgent
-            <svg className="w-4 h-4 ml-2 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 ml-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </span>
-        </Card>
-        <p className="mt-4 text-sm text-muted-foreground">
-          Categorize your tasks using the proven Eisenhower Decision Matrix
+        </div>
+        <p className="mt-6 text-base text-slate-600 font-medium">
+          📋 Categorize your tasks using the proven Eisenhower Decision Matrix
         </p>
       </div>
 

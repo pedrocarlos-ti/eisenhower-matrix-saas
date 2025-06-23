@@ -115,48 +115,59 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <header className="border-b bg-white/80 backdrop-blur-xl shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex flex-col space-y-6 lg:space-y-0 lg:flex-row lg:justify-between lg:items-center">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center space-x-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Eisenhower Matrix</h1>
-                <p className="text-muted-foreground text-sm hidden sm:block">Organize tasks by urgency and importance</p>
+                <h1 className="text-3xl sm:text-4xl font-bold gradient-text">Eisenhower Matrix</h1>
+                <p className="text-slate-600 text-base font-medium hidden sm:block">Master your productivity with the proven decision framework</p>
               </div>
             </div>
             
-            <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-4">
-              <div className="flex space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
+            <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-6">
+              <button
+                onClick={() => setShowProModal(true)}
+                className="btn-primary-large relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Upgrade to Pro
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-400 opacity-0 hover:opacity-20 transition-opacity duration-300"></div>
+              </button>
+              
+              <div className="flex space-x-3">
+                <button
                   onClick={() => setShowStats(!showStats)}
-                  className="relative"
+                  className="btn-secondary-large relative"
                 >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                   <span className="hidden sm:inline">{showStats ? 'Hide Analytics' : 'Analytics'}</span>
                   <span className="sm:hidden">Stats</span>
-                  <Badge variant="secondary" className="absolute -top-2 -right-2 px-1 text-xs">PRO</Badge>
-                </Button>
+                  <Badge className="absolute -top-2 -right-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs px-2">PRO</Badge>
+                </button>
                 
                 <ExportMenu tasks={tasks} />
               </div>
               
-              <div className="flex space-x-3">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-foreground">{totalTasks}</div>
-                  <div className="text-xs text-muted-foreground">Total Tasks</div>
+              <div className="flex space-x-4">
+                <div className="text-center bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-3 rounded-xl shadow-lg">
+                  <div className="text-2xl font-bold">{totalTasks}</div>
+                  <div className="text-xs opacity-90">Total Tasks</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-foreground">{todaysTasks}</div>
-                  <div className="text-xs text-muted-foreground">Today</div>
+                <div className="text-center bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-3 rounded-xl shadow-lg">
+                  <div className="text-2xl font-bold">{todaysTasks}</div>
+                  <div className="text-xs opacity-90">Today</div>
                 </div>
               </div>
             </div>
@@ -177,11 +188,40 @@ const App: React.FC = () => {
       </header>
 
       {/* Pro Upgrade Banner */}
-      {showUpgradeBanner && (
-        <ProUpgradePrompt 
-          variant="banner" 
-          onClose={() => setShowUpgradeBanner(false)}
-        />
+      {showUpgradeBanner && tasks.length > 3 && (
+        <div className="bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-bold text-lg">🚀 You're getting productive! Time to unlock Pro features</p>
+                  <p className="text-white/90 text-sm">Get cloud sync, team collaboration, and advanced analytics</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <button 
+                  onClick={() => setShowProModal(true)}
+                  className="bg-white text-purple-600 font-bold px-6 py-3 rounded-xl hover:bg-gray-100 transition-colors shadow-lg"
+                >
+                  Upgrade Now
+                </button>
+                <button 
+                  onClick={() => setShowUpgradeBanner(false)}
+                  className="text-white/80 hover:text-white transition-colors p-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Stats Panel */}
@@ -203,10 +243,29 @@ const App: React.FC = () => {
           {/* Pro Features Showcase */}
           {tasks.length >= 5 && tasks.length <= 15 && (
             <div className="mt-12">
-              <ProUpgradePrompt 
-                variant="inline" 
-                feature="Cloud Sync"
-              />
+              <div className="card-gradient p-8 rounded-3xl border-2 border-purple-200 shadow-2xl">
+                <div className="flex items-center space-x-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl">
+                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold gradient-text mb-3">
+                      🌟 Ready for the next level?
+                    </h3>
+                    <p className="text-slate-600 mb-4 text-lg">
+                      You're managing {tasks.length} tasks like a pro! Unlock cloud sync, team collaboration, and advanced analytics to supercharge your productivity.
+                    </p>
+                    <button 
+                      onClick={() => setShowProModal(true)}
+                      className="btn-primary-large"
+                    >
+                      ✨ Discover Pro Features
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
