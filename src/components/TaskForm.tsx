@@ -100,7 +100,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm"
                 placeholder="Enter task title"
                 required
                 autoFocus
@@ -116,7 +116,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none text-gray-900"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none text-gray-900 shadow-sm"
                 placeholder="Enter task description (optional)"
                 rows={3}
               />
@@ -132,7 +132,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   id="priority"
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as PriorityLevel)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm appearance-none"
                 >
                   <option value="high">High Priority</option>
                   <option value="medium">Medium Priority</option>
@@ -149,7 +149,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   id="dueDate"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm"
                 />
               </div>
             </div>
@@ -163,7 +163,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 id="quadrant"
                 value={quadrant}
                 onChange={(e) => setQuadrant(e.target.value as QuadrantType)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm appearance-none"
               >
                 {quadrantOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -183,7 +183,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 id="tags"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm"
                 placeholder="Enter tags separated by commas (optional)"
               />
             </div>
@@ -193,13 +193,13 @@ const TaskForm: React.FC<TaskFormProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-3 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors duration-200 font-medium"
+                className="px-6 py-3 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg border border-gray-200 transition-colors duration-200 font-medium shadow-sm"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-colors duration-200 font-medium"
+                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 font-medium shadow-sm"
               >
                 {initialTask ? 'Update Task' : 'Create Task'}
               </button>

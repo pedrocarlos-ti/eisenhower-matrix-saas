@@ -167,21 +167,21 @@ input:focus, select:focus, textarea:focus {
   padding: 1.5rem;
 }
 
-/* Gradient backgrounds */
-.bg-gradient-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
+/* Solid backgrounds */
+.bg-primary {
+  background-color: var(--primary);
 }
 
-.bg-gradient-secondary {
-  background: linear-gradient(135deg, var(--secondary) 0%, #fbbf24 100%);
+.bg-secondary {
+  background-color: var(--secondary);
 }
 
-.bg-gradient-success {
-  background: linear-gradient(135deg, var(--success) 0%, #34d399 100%);
+.bg-success {
+  background-color: var(--success);
 }
 
-.bg-gradient-danger {
-  background: linear-gradient(135deg, var(--danger) 0%, #f87171 100%);
+.bg-danger {
+  background-color: var(--danger);
 }
 
 /* Utility classes */

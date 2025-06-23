@@ -40,15 +40,15 @@ const Quadrant: React.FC<QuadrantProps> = ({
   const getQuadrantColor = (quadrant: QuadrantType) => {
     switch (quadrant) {
       case 'urgent-important':
-        return 'border-red-300 bg-red-50';
+        return 'border-gray-200 bg-white';
       case 'not-urgent-important':
-        return 'border-blue-300 bg-blue-50';
+        return 'border-gray-200 bg-white';
       case 'urgent-not-important':
-        return 'border-yellow-300 bg-yellow-50';
+        return 'border-gray-200 bg-white';
       case 'not-urgent-not-important':
-        return 'border-slate-300 bg-slate-50';
+        return 'border-gray-200 bg-white';
       default:
-        return 'border-gray-300';
+        return 'border-gray-200 bg-white';
     }
   };
 
@@ -59,9 +59,9 @@ const Quadrant: React.FC<QuadrantProps> = ({
       case 'not-urgent-important':
         return 'bg-blue-500';
       case 'urgent-not-important':
-        return 'bg-yellow-500';
+        return 'bg-amber-500';
       case 'not-urgent-not-important':
-        return 'bg-slate-500';
+        return 'bg-gray-500';
       default:
         return 'bg-gray-500';
     }
@@ -84,7 +84,7 @@ const Quadrant: React.FC<QuadrantProps> = ({
 
   return (
     <Card 
-      className={`min-h-[520px] ${getQuadrantColor(config.id)} border-2 transition-all duration-300 hover:shadow-lg`}
+      className={`min-h-[520px] ${getQuadrantColor(config.id)} border transition-all duration-300 hover:shadow-md`}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
@@ -92,33 +92,28 @@ const Quadrant: React.FC<QuadrantProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <div className="text-2xl">{getQuadrantEmoji(config.id)}</div>
-              <div className={`w-4 h-4 rounded-full ${getIndicatorColor(config.id)} shadow-lg`} />
+              <div className={`w-1 h-12 rounded-sm ${getIndicatorColor(config.id)}`} />
+              <div>
+                <CardTitle className="text-xl font-bold text-gray-800">{config.title}</CardTitle>
+                <p className="text-sm text-gray-500 mt-1">{getQuadrantEmoji(config.id)} {config.description}</p>
+              </div>
             </div>
-            <CardTitle className="text-xl font-bold text-slate-800">{config.title}</CardTitle>
           </div>
           <button
             onClick={() => onAddTask(config.id)}
-            className="bg-primary hover:bg-primary-hover text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 shadow hover:shadow-md flex items-center space-x-2"
+            className="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium px-3 py-1.5 rounded-md transition-colors duration-200 flex items-center space-x-1 shadow-sm"
           >
-            <Plus size={16} />
-            <span className="text-sm">Add Task</span>
+            <Plus size={14} />
+            <span className="text-xs">Add Task</span>
           </button>
         </div>
-        <p className="text-base text-slate-600 font-medium mt-2">{config.description}</p>
         <div className="flex items-center space-x-3 mt-4">
-          <Badge className="bg-white/80 text-slate-700 shadow-sm border border-white/40 px-3 py-1">
-            <svg className="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+          <Badge className="bg-gray-100 text-gray-700 px-2.5 py-0.5 text-xs">
             {activeTasks} active
           </Badge>
           {completedTasks > 0 && (
-            <Badge className="bg-emerald-100 text-emerald-700 shadow-sm border border-emerald-200 px-3 py-1">
-              <svg className="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-              </svg>
-              {completedTasks} done
+            <Badge className="bg-gray-100 text-gray-700 px-2.5 py-0.5 text-xs">
+              {completedTasks} completed
             </Badge>
           )}
         </div>
@@ -136,13 +131,13 @@ const Quadrant: React.FC<QuadrantProps> = ({
             />
           ))}
           {tasks.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="w-20 h-20 rounded-2xl bg-white/60 flex items-center justify-center mb-6 shadow-lg">
-                <div className="text-3xl">{getQuadrantEmoji(config.id)}</div>
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                <div className="text-2xl opacity-60">{getQuadrantEmoji(config.id)}</div>
               </div>
-              <p className="text-lg font-semibold text-slate-700 mb-2">No tasks in this quadrant</p>
-              <p className="text-sm text-slate-500 max-w-xs leading-relaxed">
-                Click the "Add Task" button above to start organizing your priorities in this category
+              <p className="text-base font-medium text-gray-700 mb-2">No tasks yet</p>
+              <p className="text-sm text-gray-500 max-w-xs leading-relaxed">
+                Add a task to this quadrant to start prioritizing your work
               </p>
             </div>
           )}
