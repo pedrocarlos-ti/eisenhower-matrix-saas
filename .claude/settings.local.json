@@ -18,7 +18,13 @@
       "Bash(npm run dev:*)",
       "Bash(npm run build:*)",
       "Bash(npx tsc:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(bun install:*)",
+      "Bash(rm:*)",
+      "Bash(timeout:*)",
+      "Bash(node:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(claude mcp:*)"
     ],
     "deny": []
   }

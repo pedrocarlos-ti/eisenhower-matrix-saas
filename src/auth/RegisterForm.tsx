@@ -10,39 +10,97 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
+import {
+  userRegistrationSchema,
+  UserRegistrationData,
+  validateData,
+  getFieldError,
+  hasFieldError,
+} from "@/utils/validation";
 
 interface RegisterFormProps {
   onToggleForm: () => void;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState<UserRegistrationData>({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const { register } = useAuth();
+
+  const validateField = (
+    fieldName: keyof UserRegistrationData,
+    value: string
+  ) => {
+    const validation = validateData(userRegistrationSchema, {
+      ...formData,
+      [fieldName]: value,
+    });
+
+    if (!validation.success && validation.errors) {
+      const fieldError = getFieldError(fieldName, validation.errors);
+      if (fieldError) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          [fieldName]: fieldError,
+        }));
+      } else {
+        setFieldErrors((prev) => {
+          const newErrors = { ...prev };
+          delete newErrors[fieldName];
+          return newErrors;
+        });
+      }
+    } else {
+      setFieldErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[fieldName];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleFieldChange = (
+    fieldName: keyof UserRegistrationData,
+    value: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleFieldBlur = (fieldName: keyof UserRegistrationData) => {
+    validateField(fieldName, formData[fieldName]);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
+    setFieldErrors({});
 
-    if (password !== confirmPassword) {
-      setFormError("Passwords do not match");
-      return;
-    }
+    const validation = validateData(userRegistrationSchema, formData);
 
-    if (password.length < 8) {
-      setFormError("Password must be at least 8 characters");
+    if (!validation.success) {
+      setFieldErrors(validation.errors || {});
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      await register(email, name, password);
+      await register(
+        validation.data!.email,
+        validation.data!.name,
+        validation.data!.password
+      );
     } catch (err) {
       setFormError(err instanceof Error ? err.message : "Failed to register");
     } finally {
@@ -51,11 +109,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
   };
 
   return (
-    <Card className="w-full shadow-2xl border border-gray-100 bg-white">
-      <CardHeader className="text-center space-y-4 pb-8">
-        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+    <Card className="w-full shadow-2xl border border-white/20 bg-white/90 backdrop-blur-xl">
+      <CardHeader className="text-center space-y-6 pb-8">
+        <div className="mx-auto w-20 h-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-600 rounded-3xl flex items-center justify-center shadow-xl">
           <svg
-            className="w-8 h-8 text-white"
+            className="w-10 h-10 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -69,10 +127,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
           </svg>
         </div>
         <div>
-          <CardTitle className="text-3xl font-bold text-gray-900">
+          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
             Create an account
           </CardTitle>
-          <CardDescription className="text-base text-gray-600 mt-2">
+          <CardDescription className="text-lg text-gray-600 mt-3 font-medium">
             Enter your details to get started for free
           </CardDescription>
         </div>
@@ -108,11 +166,33 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
               id="name"
               type="text"
               placeholder="John Doe"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full h-12 px-4 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200 placeholder:text-gray-500 bg-white border-solid"
+              value={formData.name}
+              onChange={(e) => handleFieldChange("name", e.target.value)}
+              onBlur={() => handleFieldBlur("name")}
+              className={`w-full h-12 px-4 rounded-xl focus:ring-1 transition-all duration-200 placeholder:text-gray-500 bg-white border-solid ${
+                hasFieldError("name", fieldErrors)
+                  ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
             />
+            {hasFieldError("name", fieldErrors) && (
+              <p className="text-red-600 text-sm mt-1 flex items-center">
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                {getFieldError("name", fieldErrors)}
+              </p>
+            )}
           </div>
           <div className="space-y-3">
             <label
@@ -125,11 +205,33 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
               id="email"
               type="email"
               placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full h-12 px-4 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200 placeholder:text-gray-500 bg-white border-solid"
+              value={formData.email}
+              onChange={(e) => handleFieldChange("email", e.target.value)}
+              onBlur={() => handleFieldBlur("email")}
+              className={`w-full h-12 px-4 rounded-xl focus:ring-1 transition-all duration-200 placeholder:text-gray-500 bg-white border-solid ${
+                hasFieldError("email", fieldErrors)
+                  ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
             />
+            {hasFieldError("email", fieldErrors) && (
+              <p className="text-red-600 text-sm mt-1 flex items-center">
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                {getFieldError("email", fieldErrors)}
+              </p>
+            )}
           </div>
           <div className="space-y-3">
             <label
@@ -142,11 +244,33 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
               id="password"
               type="password"
               placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full h-12 px-4 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200 placeholder:text-gray-500 bg-white border-solid"
+              value={formData.password}
+              onChange={(e) => handleFieldChange("password", e.target.value)}
+              onBlur={() => handleFieldBlur("password")}
+              className={`w-full h-12 px-4 rounded-xl focus:ring-1 transition-all duration-200 placeholder:text-gray-500 bg-white border-solid ${
+                hasFieldError("password", fieldErrors)
+                  ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
             />
+            {hasFieldError("password", fieldErrors) && (
+              <p className="text-red-600 text-sm mt-1 flex items-center">
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                {getFieldError("password", fieldErrors)}
+              </p>
+            )}
           </div>
           <div className="space-y-3">
             <label
@@ -159,15 +283,39 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
               id="confirmPassword"
               type="password"
               placeholder="••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="w-full h-12 px-4 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200 placeholder:text-gray-500 bg-white border-solid"
+              value={formData.confirmPassword}
+              onChange={(e) =>
+                handleFieldChange("confirmPassword", e.target.value)
+              }
+              onBlur={() => handleFieldBlur("confirmPassword")}
+              className={`w-full h-12 px-4 rounded-xl focus:ring-1 transition-all duration-200 placeholder:text-gray-500 bg-white border-solid ${
+                hasFieldError("confirmPassword", fieldErrors)
+                  ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
             />
+            {hasFieldError("confirmPassword", fieldErrors) && (
+              <p className="text-red-600 text-sm mt-1 flex items-center">
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                {getFieldError("confirmPassword", fieldErrors)}
+              </p>
+            )}
           </div>
           <Button
             type="submit"
-            className="w-full h-12 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 rounded-xl font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-200 mt-6"
+            className="w-full h-14 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-700 hover:via-purple-700 hover:to-indigo-700 rounded-xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] mt-6"
             disabled={isSubmitting}
           >
             {isSubmitting ? (

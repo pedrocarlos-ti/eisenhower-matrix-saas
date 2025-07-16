@@ -4,13 +4,32 @@ import { Task } from '@/types';
 const TASKS_STORAGE_KEY = 'eisenhower-matrix-tasks';
 
 /**
- * Load tasks from local storage
+ * Generate a unique ID for tasks
+ * @returns A unique string ID
+ */
+export const generateId = (): string => {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+};
+
+/**
+ * Load tasks from local storage with data transformation
  * @returns Array of tasks or empty array if none found
  */
 export const loadTasks = (): Task[] => {
   try {
-    const tasksJson = localStorage.getItem(TASKS_STORAGE_KEY);
-    return tasksJson ? JSON.parse(tasksJson) : [];
+    const stored = localStorage.getItem(TASKS_STORAGE_KEY);
+    if (!stored) return [];
+    
+    const tasks = JSON.parse(stored);
+    return tasks.map((task: any) => ({
+      ...task,
+      priority: task.priority || 'medium',
+      completed: task.completed || false,
+      tags: task.tags || [],
+      dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
+      createdAt: new Date(task.createdAt),
+      updatedAt: new Date(task.updatedAt),
+    }));
   } catch (error) {
     console.error('Error loading tasks from local storage:', error);
     return [];
@@ -59,8 +78,19 @@ export const getUserStorageKey = (userId: string, key: string): string => {
 export const loadUserTasks = (userId: string): Task[] => {
   try {
     const userKey = getUserStorageKey(userId, TASKS_STORAGE_KEY);
-    const tasksJson = localStorage.getItem(userKey);
-    return tasksJson ? JSON.parse(tasksJson) : [];
+    const stored = localStorage.getItem(userKey);
+    if (!stored) return [];
+    
+    const tasks = JSON.parse(stored);
+    return tasks.map((task: any) => ({
+      ...task,
+      priority: task.priority || 'medium',
+      completed: task.completed || false,
+      tags: task.tags || [],
+      dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
+      createdAt: new Date(task.createdAt),
+      updatedAt: new Date(task.updatedAt),
+    }));
   } catch (error) {
     console.error('Error loading user tasks from local storage:', error);
     return [];
@@ -78,5 +108,18 @@ export const saveUserTasks = (userId: string, tasks: Task[]): void => {
     localStorage.setItem(userKey, JSON.stringify(tasks));
   } catch (error) {
     console.error('Error saving user tasks to local storage:', error);
+  }
+};
+
+/**
+ * Clear user-specific tasks from local storage
+ * @param userId User ID
+ */
+export const clearUserTasks = (userId: string): void => {
+  try {
+    const userKey = getUserStorageKey(userId, TASKS_STORAGE_KEY);
+    localStorage.removeItem(userKey);
+  } catch (error) {
+    console.error('Error clearing user tasks from local storage:', error);
   }
 };

@@ -3,26 +3,85 @@ import { useAuth } from './AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { 
+  forgotPasswordSchema, 
+  ForgotPasswordData, 
+  validateData,
+  getFieldError,
+  hasFieldError
+} from '@/utils/validation';
 
 interface ForgotPasswordFormProps {
   onBack: () => void;
 }
 
 const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBack }) => {
-  const [email, setEmail] = useState('');
+  const [formData, setFormData] = useState<ForgotPasswordData>({
+    email: '',
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isSuccess, setIsSuccess] = useState(false);
   
   const { resetPassword } = useAuth();
 
+  const validateField = (fieldName: keyof ForgotPasswordData, value: string) => {
+    const validation = validateData(forgotPasswordSchema, {
+      ...formData,
+      [fieldName]: value,
+    });
+
+    if (!validation.success && validation.errors) {
+      const fieldError = getFieldError(fieldName, validation.errors);
+      if (fieldError) {
+        setFieldErrors(prev => ({
+          ...prev,
+          [fieldName]: fieldError,
+        }));
+      } else {
+        setFieldErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[fieldName];
+          return newErrors;
+        });
+      }
+    } else {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[fieldName];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleFieldChange = (fieldName: keyof ForgotPasswordData, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleFieldBlur = (fieldName: keyof ForgotPasswordData) => {
+    validateField(fieldName, formData[fieldName]);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
+    setFieldErrors({});
+
+    const validation = validateData(forgotPasswordSchema, formData);
+
+    if (!validation.success) {
+      setFieldErrors(validation.errors || {});
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      await resetPassword(email);
+      await resetPassword(validation.data!.email);
       setIsSuccess(true);
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Failed to send reset link');
@@ -64,7 +123,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBack }) => {
             <h3 className="text-2xl font-bold text-gray-900 mb-3">Check your email</h3>
             <p className="text-gray-600 mb-6 text-base leading-relaxed">
               We've sent a password reset link to<br/>
-              <strong className="text-gray-900">{email}</strong>
+              <strong className="text-gray-900">{formData.email}</strong>
             </p>
             <Button 
               onClick={onBack}
@@ -82,11 +141,23 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBack }) => {
                 id="email"
                 type="email" 
                 placeholder="name@example.com" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full h-12 px-4 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200 placeholder:text-gray-500 bg-white"
+                value={formData.email}
+                onChange={(e) => handleFieldChange("email", e.target.value)}
+                onBlur={() => handleFieldBlur("email")}
+                className={`w-full h-12 px-4 border-2 rounded-xl focus:ring-1 transition-all duration-200 placeholder:text-gray-500 bg-white ${
+                  hasFieldError("email", fieldErrors)
+                    ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                }`}
               />
+              {hasFieldError("email", fieldErrors) && (
+                <p className="text-red-600 text-sm mt-1 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {getFieldError("email", fieldErrors)}
+                </p>
+              )}
             </div>
             <Button 
               type="submit" 

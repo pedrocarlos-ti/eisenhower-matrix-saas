@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Task, QuadrantType, PriorityLevel } from '../types';
+import { taskSchema, validateData, getFieldError, hasFieldError } from '../utils/validation';
 
 interface TaskFormProps {
   isOpen: boolean;
@@ -29,6 +30,8 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const [priority, setPriority] = useState<PriorityLevel>('medium');
   const [dueDate, setDueDate] = useState('');
   const [tags, setTags] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (initialTask) {
@@ -46,15 +49,37 @@ const TaskForm: React.FC<TaskFormProps> = ({
       setDueDate('');
       setTags('');
     }
+    // Reset errors and touched state when form is opened/reset
+    setErrors({});
+    setTouched({});
   }, [initialTask, initialQuadrant, isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim()) return;
+  // Validate a single field
+  const validateField = (fieldName: string, value: any) => {
+    const formData = getFormData();
+    (formData as any)[fieldName] = value;
+    
+    const validation = validateData(taskSchema, formData);
+    
+    if (validation.success) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[fieldName];
+        return newErrors;
+      });
+    } else {
+      setErrors(prev => ({
+        ...prev,
+        ...validation.errors,
+      }));
+    }
+  };
 
+  // Get current form data in the format expected by the schema
+  const getFormData = () => {
     const taskTags = tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-
-    onSave({
+    
+    return {
       title: title.trim(),
       description: description.trim() || undefined,
       quadrant,
@@ -62,14 +87,97 @@ const TaskForm: React.FC<TaskFormProps> = ({
       dueDate: dueDate ? new Date(dueDate) : undefined,
       completed: false,
       tags: taskTags,
+    };
+  };
+
+  // Handle field blur events for validation
+  const handleBlur = (fieldName: string) => {
+    setTouched(prev => ({ ...prev, [fieldName]: true }));
+    
+    // Only validate if field has been touched and has a value, or if it's required
+    if (fieldName === 'title' || (fieldName !== 'title' && touched[fieldName])) {
+      const fieldValue = getFieldValue(fieldName);
+      validateField(fieldName, fieldValue);
+    }
+  };
+
+  // Get field value for validation
+  const getFieldValue = (fieldName: string) => {
+    switch (fieldName) {
+      case 'title':
+        return title.trim();
+      case 'description':
+        return description.trim() || undefined;
+      case 'quadrant':
+        return quadrant;
+      case 'priority':
+        return priority;
+      case 'dueDate':
+        return dueDate ? new Date(dueDate) : undefined;
+      case 'tags':
+        return tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+      default:
+        return '';
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Mark all fields as touched
+    setTouched({
+      title: true,
+      description: true,
+      quadrant: true,
+      priority: true,
+      dueDate: true,
+      tags: true,
     });
 
+    const formData = getFormData();
+    const validation = validateData(taskSchema, formData);
+    
+    if (!validation.success) {
+      setErrors(validation.errors || {});
+      return;
+    }
+
+    // Clear errors on successful validation
+    setErrors({});
+
+    onSave({
+      title: formData.title,
+      description: formData.description,
+      quadrant: formData.quadrant,
+      priority: formData.priority,
+      dueDate: formData.dueDate,
+      completed: false,
+      tags: formData.tags,
+    });
+
+    // Reset form
     setTitle('');
     setDescription('');
     setPriority('medium');
     setDueDate('');
     setTags('');
+    setErrors({});
+    setTouched({});
     onClose();
+  };
+
+  // Error message component
+  const ErrorMessage: React.FC<{ message?: string }> = ({ message }) => {
+    if (!message) return null;
+    
+    return (
+      <div className="flex items-center mt-2 text-red-600">
+        <svg className="w-4 h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+        </svg>
+        <span className="text-sm font-medium">{message}</span>
+      </div>
+    );
   };
 
   if (!isOpen) return null;
@@ -99,12 +207,22 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 type="text"
                 id="title"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm"
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  if (touched.title) {
+                    validateField('title', e.target.value.trim());
+                  }
+                }}
+                onBlur={() => handleBlur('title')}
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm ${
+                  hasFieldError('title', errors) && touched.title
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                    : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                }`}
                 placeholder="Enter task title"
-                required
                 autoFocus
               />
+              <ErrorMessage message={touched.title ? getFieldError('title', errors) : undefined} />
             </div>
 
             {/* Description */}
@@ -115,11 +233,22 @@ const TaskForm: React.FC<TaskFormProps> = ({
               <textarea
                 id="description"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none text-gray-900 shadow-sm"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  if (touched.description) {
+                    validateField('description', e.target.value.trim() || undefined);
+                  }
+                }}
+                onBlur={() => handleBlur('description')}
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 resize-none text-gray-900 shadow-sm ${
+                  hasFieldError('description', errors) && touched.description
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                    : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                }`}
                 placeholder="Enter task description (optional)"
                 rows={3}
               />
+              <ErrorMessage message={touched.description ? getFieldError('description', errors) : undefined} />
             </div>
 
             {/* Priority and Due Date Row */}
@@ -131,13 +260,24 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 <select
                   id="priority"
                   value={priority}
-                  onChange={(e) => setPriority(e.target.value as PriorityLevel)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm appearance-none"
+                  onChange={(e) => {
+                    setPriority(e.target.value as PriorityLevel);
+                    if (touched.priority) {
+                      validateField('priority', e.target.value);
+                    }
+                  }}
+                  onBlur={() => handleBlur('priority')}
+                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm appearance-none ${
+                    hasFieldError('priority', errors) && touched.priority
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                      : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                  }`}
                 >
                   <option value="high">High Priority</option>
                   <option value="medium">Medium Priority</option>
                   <option value="low">Low Priority</option>
                 </select>
+                <ErrorMessage message={touched.priority ? getFieldError('priority', errors) : undefined} />
               </div>
 
               <div>
@@ -148,9 +288,20 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   type="date"
                   id="dueDate"
                   value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm"
+                  onChange={(e) => {
+                    setDueDate(e.target.value);
+                    if (touched.dueDate) {
+                      validateField('dueDate', e.target.value ? new Date(e.target.value) : undefined);
+                    }
+                  }}
+                  onBlur={() => handleBlur('dueDate')}
+                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm ${
+                    hasFieldError('dueDate', errors) && touched.dueDate
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                      : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                  }`}
                 />
+                <ErrorMessage message={touched.dueDate ? getFieldError('dueDate', errors) : undefined} />
               </div>
             </div>
 
@@ -162,8 +313,18 @@ const TaskForm: React.FC<TaskFormProps> = ({
               <select
                 id="quadrant"
                 value={quadrant}
-                onChange={(e) => setQuadrant(e.target.value as QuadrantType)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm appearance-none"
+                onChange={(e) => {
+                  setQuadrant(e.target.value as QuadrantType);
+                  if (touched.quadrant) {
+                    validateField('quadrant', e.target.value);
+                  }
+                }}
+                onBlur={() => handleBlur('quadrant')}
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm appearance-none ${
+                  hasFieldError('quadrant', errors) && touched.quadrant
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                    : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                }`}
               >
                 {quadrantOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -171,6 +332,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   </option>
                 ))}
               </select>
+              <ErrorMessage message={touched.quadrant ? getFieldError('quadrant', errors) : undefined} />
             </div>
 
             {/* Tags */}
@@ -182,10 +344,22 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 type="text"
                 id="tags"
                 value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 shadow-sm"
+                onChange={(e) => {
+                  setTags(e.target.value);
+                  if (touched.tags) {
+                    const tagArray = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+                    validateField('tags', tagArray);
+                  }
+                }}
+                onBlur={() => handleBlur('tags')}
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm ${
+                  hasFieldError('tags', errors) && touched.tags
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                    : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                }`}
                 placeholder="Enter tags separated by commas (optional)"
               />
+              <ErrorMessage message={touched.tags ? getFieldError('tags', errors) : undefined} />
             </div>
 
             {/* Actions */}
@@ -199,7 +373,12 @@ const TaskForm: React.FC<TaskFormProps> = ({
               </button>
               <button
                 type="submit"
-                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 font-medium shadow-sm"
+                disabled={Object.keys(errors).length > 0}
+                className={`px-6 py-3 rounded-lg transition-colors duration-200 font-medium shadow-sm ${
+                  Object.keys(errors).length > 0
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-blue-500 hover:bg-blue-600 text-white'
+                }`}
               >
                 {initialTask ? 'Update Task' : 'Create Task'}
               </button>
