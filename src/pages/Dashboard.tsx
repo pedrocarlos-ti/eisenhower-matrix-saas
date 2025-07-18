@@ -136,7 +136,7 @@ const Dashboard: React.FC = () => {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50 flex relative overflow-hidden">
-        <aside className="w-80 h-screen bg-white border-r border-gray-200 flex-shrink-0 hidden xl:flex flex-col p-6 space-y-6">
+        <aside className="w-80 h-screen bg-white border-r border-gray-200 flex-shrink-0 hidden xl:flex flex-col p-6 space-y-6 h-auto">
           <div className="flex items-center space-x-3 px-2">
             <div className="h-12 w-12 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg">
               <LayoutGrid className="w-7 h-7 text-white" />

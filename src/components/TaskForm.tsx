@@ -239,7 +239,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 }
               }}
               onBlur={() => handleBlur('title')}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 font-medium ${
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 font-medium border-solid ${
                 hasFieldError('title', errors) && touched.title
                   ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
                   : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
@@ -265,7 +265,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 }
               }}
               onBlur={() => handleBlur('description')}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 resize-none text-gray-900 font-medium ${
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 resize-none text-gray-900 font-medium border-solid ${
                 hasFieldError('description', errors) && touched.description
                   ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
                   : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
@@ -292,7 +292,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   }
                 }}
                 onBlur={() => handleBlur('priority')}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 appearance-none font-medium ${
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 appearance-none font-medium border-solid ${
                   hasFieldError('priority', errors) && touched.priority
                     ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
                     : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
@@ -320,7 +320,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   }
                 }}
                 onBlur={() => handleBlur('dueDate')}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 font-medium ${
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 font-medium border-solid ${
                   hasFieldError('dueDate', errors) && touched.dueDate
                     ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
                     : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
@@ -350,7 +350,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 }
               }}
               onBlur={() => handleBlur('quadrant')}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 appearance-none font-medium ${
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 appearance-none font-medium border-solid ${
                 hasFieldError('quadrant', errors) && touched.quadrant
                   ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
                   : initialQuadrant 
@@ -384,7 +384,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 }
               }}
               onBlur={() => handleBlur('tags')}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 font-medium ${
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 font-medium border-solid ${
                 hasFieldError('tags', errors) && touched.tags
                   ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
                   : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
