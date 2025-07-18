@@ -16,29 +16,29 @@ const quadrantConfigs: QuadrantConfig[] = [
     id: "urgent-important",
     title: "Do First",
     description: "Urgent & Important",
-    color: "text-red-700",
-    bgColor: "bg-red-50",
+    color: "text-red-600",
+    bgColor: "bg-red-50/60",
   },
   {
     id: "not-urgent-important",
     title: "Schedule",
     description: "Important, Not Urgent",
-    color: "text-blue-700",
-    bgColor: "bg-blue-50",
+    color: "text-indigo-600",
+    bgColor: "bg-indigo-50/60",
   },
   {
     id: "urgent-not-important",
     title: "Delegate",
     description: "Urgent, Not Important",
-    color: "text-yellow-700",
-    bgColor: "bg-yellow-50",
+    color: "text-amber-600",
+    bgColor: "bg-amber-50/60",
   },
   {
     id: "not-urgent-not-important",
     title: "Eliminate",
     description: "Neither Urgent nor Important",
-    color: "text-gray-700",
-    bgColor: "bg-gray-50",
+    color: "text-gray-600",
+    bgColor: "bg-gray-50/60",
   },
 ];
 
@@ -68,88 +68,97 @@ const Matrix: React.FC<MatrixProps> = React.memo(
             {/* Eisenhower Matrix - Proper Grid Design */}
             <div className="max-w-7xl mx-auto">
               {/* Matrix Title with Modern Styling */}
-              <div className="flex items-center justify-center mb-8">
-                <div className="text-center">
-                  <h2 className="text-4xl font-black gradient-text mb-3">Eisenhower Decision Matrix</h2>
-                  <p className="text-gray-600 text-lg font-medium">Organize tasks by urgency and importance</p>
-                </div>
-              </div>
+             
 
               {/* Modern Matrix Container with 3D Effects */}
               <div className="relative">
                 
-                {/* Modern Urgency Axis - Top */}
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center shadow-md">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <span className="text-xl font-black text-gray-700">Not Urgent</span>
+                {/* Simple Urgency Axis - Top - Hidden on mobile, visible on md screens and up */}
+                <div className="relative h-8 mb-6 mx-auto w-3/4 hidden md:block">
+                  {/* Horizontal line */}
+                  <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-gradient-to-r from-indigo-500 to-red-500 transform -translate-y-1/2"></div>
+                  
+                  {/* Left arrow */}
+                  <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                    <svg className="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M2 12l5-5v10l-5-5z" />
+                    </svg>
                   </div>
                   
-                  <div className="flex items-center space-x-6 text-gray-400">
-                    <div className="h-1 bg-gradient-to-r from-blue-400 to-red-400 flex-1 min-w-[250px] rounded-full shadow-sm"></div>
-                    <div className="px-4 py-2 bg-white rounded-lg shadow-sm">
-                      <span className="text-sm font-black text-gray-600">URGENCY</span>
-                    </div>
-                    <div className="h-1 bg-gradient-to-r from-blue-400 to-red-400 flex-1 min-w-[250px] rounded-full shadow-sm"></div>
+                  {/* Right arrow */}
+                  <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2">
+                    <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M22 12l-5 5V7l5 5z" />
+                    </svg>
                   </div>
                   
-                  <div className="flex items-center space-x-4">
-                    <span className="text-xl font-black text-gray-700">Urgent</span>
-                    <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center shadow-md">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                  {/* Label */}
+                  <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <div className="px-3 py-1 bg-white rounded-md border border-gray-100 shadow-sm">
+                      <span className="text-xs font-bold text-gray-600">URGENCY</span>
                     </div>
+                  </div>
+                  
+                  {/* Left label */}
+                  <div className="absolute left-0 bottom-0 transform -translate-x-1/2 translate-y-full mt-1">
+                    <span className="text-xs font-medium text-gray-600 whitespace-nowrap">Not Urgent</span>
+                  </div>
+                  
+                  {/* Right label */}
+                  <div className="absolute right-0 bottom-0 transform translate-x-1/2 translate-y-full mt-1">
+                    <span className="text-xs font-medium text-gray-600 whitespace-nowrap">Urgent</span>
                   </div>
                 </div>
 
                 {/* Main Matrix Grid */}
                 <div className="relative">
-                  {/* Modern Importance Axis - Left */}
-                  <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between items-center -ml-24 w-20">
-                    <div className="flex flex-col items-center space-y-3">
-                      <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-md">
-                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                        </svg>
-                      </div>
-                      <span className="text-sm font-black text-gray-700 transform -rotate-90 whitespace-nowrap">Important</span>
-                    </div>
-                    
+                  {/* Simple Importance Axis - Left - Hidden on mobile, visible on md screens and up */}
+                  <div className="absolute -left-16 top-0 h-full hidden md:flex items-center">
                     <div className="flex flex-col items-center">
-                      <div className="w-1 bg-gradient-to-b from-green-400 to-gray-400 h-20 rounded-full shadow-sm"></div>
-                      <div className="px-2 py-1 bg-white rounded-md shadow-sm my-6">
-                        <span className="text-xs font-black text-gray-600 transform -rotate-90 whitespace-nowrap block">IMPORTANCE</span>
-                      </div>
-                      <div className="w-1 bg-gradient-to-b from-green-400 to-gray-400 h-20 rounded-full shadow-sm"></div>
-                    </div>
-                    
-                    <div className="flex flex-col items-center space-y-3">
-                      <span className="text-sm font-black text-gray-700 transform -rotate-90 whitespace-nowrap">Not Important</span>
-                      <div className="w-12 h-12 bg-gray-500 rounded-xl flex items-center justify-center shadow-md">
-                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
-                        </svg>
+                      <div className="relative h-64 w-8">
+                        {/* Vertical line */}
+                        <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-indigo-600 to-gray-400 transform -translate-x-1/2"></div>
+                        
+                        {/* Top arrow */}
+                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                          <svg className="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L7 7h10l-5-5z" />
+                          </svg>
+                        </div>
+                        
+                        {/* Bottom arrow */}
+                        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
+                          <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 22l5-5H7l5 5z" />
+                          </svg>
+                        </div>
+                        
+                        {/* Label */}
+                        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 -ml-10">
+                          <div className="px-2 py-1 bg-white rounded-md border border-gray-100 shadow-sm translate-x-6 rotate-90">
+                            <span className="text-xs font-bold text-gray-600 transform -rotate-180 block whitespace-nowrap">IMPORTANCE</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
 
+                  {/* Empty div to remove duplicate axis */}
+
                   {/* Modern Matrix Grid with 3D Dividers */}
                   <div className="relative">
-                    {/* Vertical Divider with 3D Effect */}
-                    <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 transform -translate-x-1/2 z-10"></div>
-                    {/* Horizontal Divider with 3D Effect */}
-                    <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-200 transform -translate-y-1/2 z-10"></div>
-                    
-                    {/* Center intersection point */}
-                    <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-indigo-500 rounded-full transform -translate-x-1/2 -translate-y-1/2 z-20"></div>
-                    
-                    {/* 2x2 Grid with Enhanced Spacing */}
-                    <div className="grid grid-cols-2 gap-0 min-h-[600px]">
+                    {/* Fixed height container to ensure consistent divider positioning */}
+                    <div className="relative h-[600px]">
+                      {/* Vertical Divider with 3D Effect - Using fixed height instead of top/bottom */}
+                      <div className="absolute left-1/2 top-0 h-full w-0.5 bg-gray-200 transform -translate-x-1/2 z-10"></div>
+                      {/* Horizontal Divider with 3D Effect - Using fixed width instead of left/right */}
+                      <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 transform -translate-y-1/2 z-10"></div>
+                      
+                      {/* Center intersection point */}
+                      <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-indigo-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 z-20"></div>
+                      
+                      {/* 2x2 Grid with Fixed Height */}
+                      <div className="grid grid-cols-2 gap-0 h-full md:ml-8">
                       {quadrantConfigs.map((config, index) => (
                         <div
                           key={config.id}
@@ -172,6 +181,7 @@ const Matrix: React.FC<MatrixProps> = React.memo(
                           </div>
                         </div>
                       ))}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -184,4 +194,4 @@ const Matrix: React.FC<MatrixProps> = React.memo(
   }
 );
 
-export default Matrix;
+export { Matrix };

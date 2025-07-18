@@ -202,218 +202,224 @@ const TaskForm: React.FC<TaskFormProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="card-gradient rounded-3xl shadow-2xl w-full max-w-lg border-2 border-white/60 animate-fade-in-scale">
-        <div className="p-10">
-          <div className="flex items-center space-x-4 mb-10">
-            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform duration-300">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${isOpen ? 'visible' : 'invisible'}`}
+      onClick={onClose}
+    >
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true" />
+      <div
+        className="relative bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-8 border border-gray-100"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <span className="w-8 h-8 bg-indigo-600 rounded-md flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
               </svg>
-            </div>
-            <h2 className="text-3xl font-black gradient-text">
-              {initialTask ? 'Edit Task' : 'Create New Task'}
-            </h2>
+            </span>
+            {initialTask ? 'Edit Task' : 'Create New Task'}
+          </h2>
+          <div className="h-1 w-16 bg-indigo-500 rounded-full mt-2"></div>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Title */}
+          <div>
+            <label htmlFor="title" className="block text-sm font-semibold text-gray-900 mb-3">
+              Task Title *
+            </label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                if (touched.title) {
+                  validateField('title', e.target.value.trim());
+                }
+              }}
+              onBlur={() => handleBlur('title')}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 font-medium ${
+                hasFieldError('title', errors) && touched.title
+                  ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
+                  : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
+              }`}
+              placeholder="Enter task title"
+              autoFocus
+            />
+            <ErrorMessage message={touched.title ? getFieldError('title', errors) : undefined} />
           </div>
-          
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Title */}
+
+          {/* Description */}
+          <div>
+            <label htmlFor="description" className="block text-sm font-semibold text-gray-900 mb-3">
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+                if (touched.description) {
+                  validateField('description', e.target.value.trim() || undefined);
+                }
+              }}
+              onBlur={() => handleBlur('description')}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 resize-none text-gray-900 font-medium ${
+                hasFieldError('description', errors) && touched.description
+                  ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
+                  : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
+              }`}
+              placeholder="Enter task description (optional)"
+              rows={3}
+            />
+            <ErrorMessage message={touched.description ? getFieldError('description', errors) : undefined} />
+          </div>
+
+          {/* Priority and Due Date */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-semibold text-gray-900 mb-3">
-                Task Title *
-              </label>
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                  if (touched.title) {
-                    validateField('title', e.target.value.trim());
-                  }
-                }}
-                onBlur={() => handleBlur('title')}
-                className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg backdrop-blur-sm font-medium ${
-                  hasFieldError('title', errors) && touched.title
-                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
-                    : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
-                }`}
-                placeholder="Enter task title"
-                autoFocus
-              />
-              <ErrorMessage message={touched.title ? getFieldError('title', errors) : undefined} />
-            </div>
-
-            {/* Description */}
-            <div>
-              <label htmlFor="description" className="block text-sm font-semibold text-gray-900 mb-3">
-                Description
-              </label>
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                  if (touched.description) {
-                    validateField('description', e.target.value.trim() || undefined);
-                  }
-                }}
-                onBlur={() => handleBlur('description')}
-                className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 resize-none text-gray-900 shadow-lg backdrop-blur-sm font-medium ${
-                  hasFieldError('description', errors) && touched.description
-                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
-                    : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
-                }`}
-                placeholder="Enter task description (optional)"
-                rows={3}
-              />
-              <ErrorMessage message={touched.description ? getFieldError('description', errors) : undefined} />
-            </div>
-
-            {/* Priority and Due Date Row */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="priority" className="block text-sm font-semibold text-gray-900 mb-3">
-                  Priority
-                </label>
-                <select
-                  id="priority"
-                  value={priority}
-                  onChange={(e) => {
-                    setPriority(e.target.value as PriorityLevel);
-                    if (touched.priority) {
-                      validateField('priority', e.target.value);
-                    }
-                  }}
-                  onBlur={() => handleBlur('priority')}
-                  className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg appearance-none backdrop-blur-sm font-medium ${
-                    hasFieldError('priority', errors) && touched.priority
-                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
-                      : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
-                  }`}
-                >
-                  <option value="high">High Priority</option>
-                  <option value="medium">Medium Priority</option>
-                  <option value="low">Low Priority</option>
-                </select>
-                <ErrorMessage message={touched.priority ? getFieldError('priority', errors) : undefined} />
-              </div>
-
-              <div>
-                <label htmlFor="dueDate" className="block text-sm font-semibold text-gray-900 mb-3">
-                  Due Date
-                </label>
-                <input
-                  type="date"
-                  id="dueDate"
-                  value={dueDate}
-                  onChange={(e) => {
-                    setDueDate(e.target.value);
-                    if (touched.dueDate) {
-                      validateField('dueDate', e.target.value ? new Date(e.target.value) : undefined);
-                    }
-                  }}
-                  onBlur={() => handleBlur('dueDate')}
-                  className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg backdrop-blur-sm font-medium ${
-                    hasFieldError('dueDate', errors) && touched.dueDate
-                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
-                      : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
-                  }`}
-                />
-                <ErrorMessage message={touched.dueDate ? getFieldError('dueDate', errors) : undefined} />
-              </div>
-            </div>
-
-            {/* Quadrant */}
-            <div>
-              <label htmlFor="quadrant" className="block text-sm font-semibold text-gray-900 mb-3">
-                Quadrant
-                {initialQuadrant && (
-                  <span className="ml-2 text-xs text-blue-600 font-medium">
-                    (Pre-selected)
-                  </span>
-                )}
+              <label htmlFor="priority" className="block text-sm font-semibold text-gray-900 mb-3">
+                Priority
               </label>
               <select
-                id="quadrant"
-                value={quadrant}
+                id="priority"
+                value={priority}
                 onChange={(e) => {
-                  setQuadrant(e.target.value as QuadrantType);
-                  if (touched.quadrant) {
-                    validateField('quadrant', e.target.value);
+                  setPriority(e.target.value as PriorityLevel);
+                  if (touched.priority) {
+                    validateField('priority', e.target.value);
                   }
                 }}
-                onBlur={() => handleBlur('quadrant')}
-                className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg appearance-none backdrop-blur-sm font-medium ${
-                  hasFieldError('quadrant', errors) && touched.quadrant
-                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
-                    : initialQuadrant 
-                      ? 'border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500 bg-indigo-50/50'
-                      : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
+                onBlur={() => handleBlur('priority')}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 appearance-none font-medium ${
+                  hasFieldError('priority', errors) && touched.priority
+                    ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
+                    : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
                 }`}
               >
-                {quadrantOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
+                <option value="high">High Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="low">Low Priority</option>
               </select>
-              <ErrorMessage message={touched.quadrant ? getFieldError('quadrant', errors) : undefined} />
+              <ErrorMessage message={touched.priority ? getFieldError('priority', errors) : undefined} />
             </div>
 
-            {/* Tags */}
             <div>
-              <label htmlFor="tags" className="block text-sm font-semibold text-gray-900 mb-3">
-                Tags
+              <label htmlFor="dueDate" className="block text-sm font-semibold text-gray-900 mb-3">
+                Due Date
               </label>
               <input
-                type="text"
-                id="tags"
-                value={tags}
+                type="date"
+                id="dueDate"
+                value={dueDate}
                 onChange={(e) => {
-                  setTags(e.target.value);
-                  if (touched.tags) {
-                    const tagArray = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-                    validateField('tags', tagArray);
+                  setDueDate(e.target.value);
+                  if (touched.dueDate) {
+                    validateField('dueDate', e.target.value ? new Date(e.target.value) : undefined);
                   }
                 }}
-                onBlur={() => handleBlur('tags')}
-                className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg backdrop-blur-sm font-medium ${
-                  hasFieldError('tags', errors) && touched.tags
-                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
-                    : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
+                onBlur={() => handleBlur('dueDate')}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 font-medium ${
+                  hasFieldError('dueDate', errors) && touched.dueDate
+                    ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
+                    : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
                 }`}
-                placeholder="Enter tags separated by commas (optional)"
               />
-              <ErrorMessage message={touched.tags ? getFieldError('tags', errors) : undefined} />
+              <ErrorMessage message={touched.dueDate ? getFieldError('dueDate', errors) : undefined} />
             </div>
+          </div>
 
-            {/* Actions */}
-            <div className="flex justify-end space-x-4 pt-8">
-              <button
-                type="button"
-                onClick={onClose}
-                className="btn-secondary-large transform hover:scale-105 transition-all duration-300"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={Object.keys(errors).length > 0}
-                className={`btn-primary-large transform hover:scale-105 transition-all duration-300 ${
-                  Object.keys(errors).length > 0
-                    ? 'opacity-50 cursor-not-allowed'
-                    : ''
-                }`}
-              >
-                {initialTask ? 'Update Task' : 'Create Task'}
-              </button>
-            </div>
+          {/* Quadrant */}
+          <div>
+            <label htmlFor="quadrant" className="block text-sm font-semibold text-gray-900 mb-3">
+              Quadrant
+              {initialQuadrant && (
+                <span className="ml-2 text-xs text-blue-600 font-medium">
+                  (Pre-selected)
+                </span>
+              )}
+            </label>
+            <select
+              id="quadrant"
+              value={quadrant}
+              onChange={(e) => {
+                setQuadrant(e.target.value as QuadrantType);
+                if (touched.quadrant) {
+                  validateField('quadrant', e.target.value);
+                }
+              }}
+              onBlur={() => handleBlur('quadrant')}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 appearance-none font-medium ${
+                hasFieldError('quadrant', errors) && touched.quadrant
+                  ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
+                  : initialQuadrant 
+                    ? 'border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500 bg-indigo-50/30'
+                    : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
+              }`}
+            >
+              {quadrantOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <ErrorMessage message={touched.quadrant ? getFieldError('quadrant', errors) : undefined} />
+          </div>
+
+          {/* Tags */}
+          <div>
+            <label htmlFor="tags" className="block text-sm font-semibold text-gray-900 mb-3">
+              Tags
+            </label>
+            <input
+              type="text"
+              id="tags"
+              value={tags}
+              onChange={(e) => {
+                setTags(e.target.value);
+                if (touched.tags) {
+                  const tagArray = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+                  validateField('tags', tagArray);
+                }
+              }}
+              onBlur={() => handleBlur('tags')}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 transition-all duration-200 text-gray-900 font-medium ${
+                hasFieldError('tags', errors) && touched.tags
+                  ? 'border-red-300 focus:ring-red-400 focus:border-red-400 bg-red-50/30'
+                  : 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 bg-white'
+              }`}
+              placeholder="Enter tags separated by commas (optional)"
+            />
+            <ErrorMessage message={touched.tags ? getFieldError('tags', errors) : undefined} />
+          </div>
+
+          {/* Actions */}
+          <div className="flex justify-end space-x-4 pt-8">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all duration-200"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={Object.keys(errors).length > 0}
+              className={`px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-all duration-200 ${
+                Object.keys(errors).length > 0
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ''
+              }`}
+            >
+              {initialTask ? 'Update Task' : 'Create Task'}
+            </button>
+          </div>
           </form>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
+
 
 export default TaskForm;

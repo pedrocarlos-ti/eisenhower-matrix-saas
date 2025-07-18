@@ -81,8 +81,9 @@ const Quadrant: React.FC<QuadrantProps> = React.memo(({
         <div className="text-sm font-medium text-gray-600">{taskStats.activeTasks} active</div>
       </div>
       
-      <div className="flex-1 overflow-y-auto scrollbar-thin space-y-3 pr-1">
-        {tasks.map((task) => (
+      <div className="flex-1 overflow-y-auto scrollbar-thin space-y-3 pr-1 max-h-[320px]">
+        {/* Show only first 5 tasks to prevent layout issues */}
+        {tasks.slice(0, 5).map((task) => (
           <TaskItem
             key={task.id}
             task={task}
@@ -91,6 +92,11 @@ const Quadrant: React.FC<QuadrantProps> = React.memo(({
             onToggleComplete={onToggleComplete}
           />
         ))}
+        {tasks.length > 5 && (
+          <div className="text-center py-2 text-xs text-gray-500">
+            +{tasks.length - 5} more tasks
+          </div>
+        )}
         {tasks.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 py-10 border border-dashed border-gray-300 rounded-xl">
             <p className="text-sm font-medium">No tasks yet.</p>

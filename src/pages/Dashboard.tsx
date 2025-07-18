@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '../auth/AuthContext';
-import Matrix from '../components/Matrix';
+import { Matrix } from '../components/Matrix';
 import { Task, QuadrantType } from '../types';
 import { loadTasks, saveTasks, generateId } from '../utils/storage';
 import {
@@ -227,7 +227,7 @@ const Dashboard: React.FC = () => {
                   <input
                     type="text"
                     placeholder="Search tasks..."
-                    className="bg-white border border-gray-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 rounded-lg pl-10 pr-4 py-2 w-full text-sm"
+                    className="bg-white border border-gray-200 border-solid focus:border-purple-500 focus:ring-1 focus:ring-purple-500 rounded-lg pl-10 pr-4 py-2 w-full text-sm"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
@@ -243,18 +243,20 @@ const Dashboard: React.FC = () => {
                     <SelectItem value="low">Low</SelectItem>
                   </SelectContent>
                 </Select>
-                <div className="flex items-center space-x-2 bg-white rounded-lg px-3 py-2 border border-gray-200">
+                <button
+                  onClick={() => setShowCompleted(!showCompleted)}
+                  className="flex items-center space-x-2 bg-white hover:bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 text-sm font-medium text-gray-600 transition-colors"
+                >
                   <input
                     type="checkbox"
                     id="showCompleted"
                     checked={showCompleted}
                     onChange={() => setShowCompleted(!showCompleted)}
-                    className="rounded text-purple-500 focus:ring-purple-500"
+                    className="rounded text-purple-500 focus:ring-purple-500 w-fit"
+                    onClick={(e) => e.stopPropagation()}
                   />
-                  <label htmlFor="showCompleted" className="text-sm font-medium text-gray-600">
-                    Show completed
-                  </label>
-                </div>
+                  <span>Show completed</span>
+                </button>
                 <button onClick={() => handleAddTask('urgent-important')} className="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-full flex items-center gap-2 shadow transition">
                   <Plus className="w-5 h-5" />
                   <span className="text-sm font-medium">New Task</span>

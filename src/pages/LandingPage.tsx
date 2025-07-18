@@ -31,13 +31,13 @@ const LandingPage: React.FC<LandingPageProps> = ({
   return (
     <div className="min-h-screen bg-gray-50 font-sans antialiased">
       {/* Header */}
-      <header className="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+      <header className="fixed inset-x-0 top-0 z-50 transition-all duration-300 bg-white/70 backdrop-blur-sm shadow-sm">
         <nav className="container mx-auto flex items-center justify-between p-4 lg:px-8" aria-label="Global">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md ring-1 ring-white/20">
-              <CheckSquare className="w-6 h-6 text-white" />
+            <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-md flex items-center justify-center shadow-sm ring-1 ring-white/20">
+              <CheckSquare className="w-5 h-5 text-white" />
             </div>
-            <a href="#" className="text-2xl font-bold text-gray-800">
+            <a href="#" className="text-xl font-semibold text-gray-700">
               Eisenhower
             </a>
           </div>
@@ -53,7 +53,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
           </div>
           <div className="hidden lg:flex lg:gap-x-8">
             {navLinks.map((link) => (
-              <a key={link.name} href={link.href} className="text-sm font-semibold leading-6 text-gray-600 hover:text-indigo-600 transition-colors">
+              <a key={link.name} href={link.href} className="text-sm font-medium leading-6 text-gray-500 hover:text-indigo-600 transition-colors">
                 {link.name}
               </a>
             ))}

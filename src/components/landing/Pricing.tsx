@@ -8,10 +8,10 @@ interface PricingProps {
 }
 
 const PricingTier: React.FC<{ plan: any; onAction: () => void; isPopular?: boolean }> = ({ plan, onAction, isPopular = false }) => (
-  <div className={`relative rounded-2xl border p-8 shadow-lg transition-all duration-300 ${isPopular ? 'bg-gray-900 border-purple-500/50 scale-105' : 'bg-white border-gray-200'}`}>
+  <div className={`relative rounded-2xl border p-8 shadow-sm transition-all duration-300 ${isPopular ? 'bg-indigo-900 border-indigo-500/50 scale-105' : 'bg-white border-gray-100'}`}>
     {isPopular && (
       <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
-        <div className="flex items-center gap-x-2 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-1.5 text-xs font-semibold text-white">
+        <div className="flex items-center gap-x-2 rounded-full bg-indigo-600 px-4 py-1.5 text-xs font-semibold text-white">
           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
           <span>Most Popular</span>
         </div>
@@ -35,7 +35,7 @@ const PricingTier: React.FC<{ plan: any; onAction: () => void; isPopular?: boole
     <Button
       onClick={onAction}
       variant={isPopular ? 'default' : 'outline'}
-      className={`mt-8 w-full ${isPopular ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700' : ''}`}
+      className={`mt-8 w-full ${isPopular ? 'bg-indigo-600 text-white hover:bg-indigo-700' : ''}`}
     >
       {isPopular ? 'Upgrade to Pro' : 'Get started'}
     </Button>
@@ -76,11 +76,11 @@ const Pricing: React.FC<PricingProps> = ({ onSignUp, onUpgrade }) => {
   };
 
   return (
-    <div id="pricing" className="py-24 sm:py-32 bg-gray-50">
+    <div id="pricing" className="py-24 sm:py-32 bg-gray-50/60">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-base font-semibold leading-7 text-indigo-600">Pricing</h2>
-          <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          <p className="mt-2 text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl">
             Simple, transparent pricing
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
@@ -95,7 +95,7 @@ const Pricing: React.FC<PricingProps> = ({ onSignUp, onUpgrade }) => {
         
         <div className="mx-auto mt-16 max-w-2xl text-center">
           <p className="text-base leading-7 text-gray-600">
-            Need a custom plan for your enterprise? <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">Contact us</a>
+            Need a custom plan for your enterprise? <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-700">Contact us</a>
           </p>
         </div>
       </div>

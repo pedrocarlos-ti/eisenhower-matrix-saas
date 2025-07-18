@@ -6,37 +6,37 @@ const testimonials = [
     content: "The Eisenhower Matrix app has completely transformed how I manage my workload. I'm now able to focus on what truly matters and have increased my productivity by at least 30%.",
     author: "Sarah Johnson",
     role: "Marketing Director",
-    avatar: "/avatars/avatar-1.jpg"
+    avatar: "https://avatars.githubusercontent.com/u/18473317"
   },
   {
     content: "As a project manager, I need to juggle multiple priorities. This tool has made it incredibly easy to visualize and organize tasks based on urgency and importance.",
     author: "Michael Chen",
     role: "Senior Project Manager",
-    avatar: "/avatars/avatar-2.jpg"
+    avatar: "https://avatars.githubusercontent.com/u/18473317"
   },
   {
     content: "The Pro version's team collaboration feature has been a game-changer for our startup. We can now align on priorities and make sure everyone is working on the right things.",
     author: "Emma Rodriguez",
     role: "Startup Founder",
-    avatar: "/avatars/avatar-3.jpg"
+    avatar: "https://avatars.githubusercontent.com/u/18473317"
   },
   {
     content: "I've tried dozens of productivity tools, but this is the first one that actually helped me implement the Eisenhower method effectively. Worth every penny of the Pro subscription.",
     author: "David Kim",
     role: "Freelance Developer",
-    avatar: "/avatars/avatar-4.jpg"
+    avatar: "https://avatars.githubusercontent.com/u/18473317"
   },
   {
     content: "The analytics feature in the Pro plan gives me invaluable insights into how I spend my time. I've been able to identify and eliminate productivity bottlenecks.",
     author: "Priya Patel",
     role: "Operations Manager",
-    avatar: "/avatars/avatar-5.jpg"
+    avatar: "https://avatars.githubusercontent.com/u/18473317"
   },
   {
     content: "As someone with ADHD, this tool has been life-changing. The visual matrix helps me stay focused and prioritize effectively. I recommend it to all my clients.",
     author: "James Wilson",
     role: "Executive Coach",
-    avatar: "/avatars/avatar-6.jpg"
+    avatar: "https://avatars.githubusercontent.com/u/18473317"
   }
 ];
 
