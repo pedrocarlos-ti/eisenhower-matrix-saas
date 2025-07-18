@@ -24,7 +24,12 @@
       "Bash(timeout:*)",
       "Bash(node:*)",
       "WebFetch(domain:localhost)",
-      "Bash(claude mcp:*)"
+      "Bash(claude mcp:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_press_key"
     ],
     "deny": []
   }

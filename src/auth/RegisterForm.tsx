@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useAuth } from "./AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,27 @@ import {
   hasFieldError,
 } from "@/utils/validation";
 
+// Password strength calculator
+const getPasswordStrength = (password: string) => {
+  if (!password) return { score: 0, text: "", color: "" };
+  
+  let score = 0;
+  const checks = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+  
+  score = Object.values(checks).filter(Boolean).length;
+  
+  if (score < 2) return { score, text: "Weak", color: "text-red-500" };
+  if (score < 4) return { score, text: "Fair", color: "text-yellow-500" };
+  if (score < 5) return { score, text: "Good", color: "text-blue-500" };
+  return { score, text: "Strong", color: "text-green-500" };
+};
+
 interface RegisterFormProps {
   onToggleForm: () => void;
 }
@@ -34,6 +55,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const { register } = useAuth();
+
+  // Calculate password strength
+  const passwordStrength = useMemo(() => 
+    getPasswordStrength(formData.password), 
+    [formData.password]
+  );
 
   const validateField = (
     fieldName: keyof UserRegistrationData,
@@ -137,21 +164,49 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
       </CardHeader>
       <CardContent className="px-8 pb-8">
         {formError && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 flex items-center space-x-3">
-            <svg
-              className="w-5 h-5 text-red-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{formError}</span>
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
+            <div className="flex items-center space-x-3">
+              <svg
+                className="w-5 h-5 text-red-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{formError}</span>
+            </div>
+            {formError.includes("already") && (
+              <div className="mt-3 pt-3 border-t border-red-200">
+                <p className="text-sm text-red-600 mb-2">
+                  Already have an account?
+                </p>
+                <button
+                  onClick={onToggleForm}
+                  className="inline-flex items-center text-sm font-semibold text-red-700 hover:text-red-800 hover:underline"
+                >
+                  Sign in instead
+                  <svg
+                    className="w-4 h-4 ml-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -253,6 +308,45 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
                   : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
               }`}
             />
+            {/* Password strength indicator */}
+            {formData.password && (
+              <div className="mt-2">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs text-gray-500">Password strength:</span>
+                  <span className={`text-xs font-medium ${passwordStrength.color}`}>
+                    {passwordStrength.text}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                  <div
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      passwordStrength.score === 1 ? 'bg-red-500 w-1/5' :
+                      passwordStrength.score === 2 ? 'bg-yellow-500 w-2/5' :
+                      passwordStrength.score === 3 ? 'bg-yellow-500 w-3/5' :
+                      passwordStrength.score === 4 ? 'bg-blue-500 w-4/5' :
+                      passwordStrength.score === 5 ? 'bg-green-500 w-full' :
+                      'bg-gray-300 w-0'
+                    }`}
+                  />
+                </div>
+                <div className="mt-1 text-xs text-gray-500 space-y-1">
+                  <div className="flex flex-wrap gap-2">
+                    <span className={formData.password.length >= 8 ? 'text-green-600' : 'text-gray-400'}>
+                      ✓ 8+ characters
+                    </span>
+                    <span className={/[A-Z]/.test(formData.password) ? 'text-green-600' : 'text-gray-400'}>
+                      ✓ uppercase
+                    </span>
+                    <span className={/[a-z]/.test(formData.password) ? 'text-green-600' : 'text-gray-400'}>
+                      ✓ lowercase
+                    </span>
+                    <span className={/[0-9]/.test(formData.password) ? 'text-green-600' : 'text-gray-400'}>
+                      ✓ number
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
             {hasFieldError("password", fieldErrors) && (
               <p className="text-red-600 text-sm mt-1 flex items-center">
                 <svg

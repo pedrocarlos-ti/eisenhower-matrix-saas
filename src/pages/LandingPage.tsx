@@ -1,4 +1,5 @@
 import React from 'react';
+import { Menu, X, CheckSquare, ArrowRight } from 'lucide-react';
 import Hero from '@/components/landing/Hero';
 import Features from '@/components/landing/Features';
 import Pricing from '@/components/landing/Pricing';
@@ -9,87 +10,137 @@ interface LandingPageProps {
   onGetStarted: () => void;
   onSignUp: () => void;
   onUpgrade: () => void;
+  isAuthenticated?: boolean;
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({ 
   onGetStarted, 
   onSignUp, 
-  onUpgrade 
+  onUpgrade,
+  isAuthenticated = false
 }) => {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  const navLinks = [
+    { name: 'Features', href: '#features' },
+    { name: 'Pricing', href: '#pricing' },
+    { name: 'Testimonials', href: '#testimonials' },
+    { name: 'Blog', href: '#' },
+  ];
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <header className="absolute inset-x-0 top-0 z-50">
-        <nav className="flex items-center justify-between p-4 lg:px-8 bg-white/85 backdrop-blur-xl border-b border-gray-100/50 shadow-sm" aria-label="Global">
-          <div className="flex items-center space-x-3">
-            <div className="w-11 h-11 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg ring-1 ring-white/10 transition-transform duration-200 hover:scale-110">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
+    <div className="min-h-screen bg-gray-50 font-sans antialiased">
+      {/* Header */}
+      <header className="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+        <nav className="container mx-auto flex items-center justify-between p-4 lg:px-8" aria-label="Global">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md ring-1 ring-white/20">
+              <CheckSquare className="w-6 h-6 text-white" />
             </div>
-            <a href="#" className="text-xl font-bold bg-gradient-to-r from-gray-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent hover:from-indigo-600 hover:via-purple-600 hover:to-indigo-600 transition-all duration-300">
-              Eisenhower Matrix
+            <a href="#" className="text-2xl font-bold text-gray-800">
+              Eisenhower
             </a>
           </div>
           <div className="flex lg:hidden">
-            <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-xl p-2.5 text-gray-700 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200">
+            <button
+              type="button"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+              onClick={() => setIsMenuOpen(true)}
+            >
               <span className="sr-only">Open main menu</span>
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-              </svg>
+              <Menu className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
-          <div className="hidden lg:flex lg:gap-x-2">
-            <a href="#features" className="relative text-sm font-semibold leading-6 text-gray-700 hover:text-indigo-600 transition-all duration-200 px-4 py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 group">
-              Features
-              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
-            </a>
-            <a href="#pricing" className="relative text-sm font-semibold leading-6 text-gray-700 hover:text-indigo-600 transition-all duration-200 px-4 py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 group">
-              Pricing
-              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
-            </a>
-            <a href="#testimonials" className="relative text-sm font-semibold leading-6 text-gray-700 hover:text-indigo-600 transition-all duration-200 px-4 py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 group">
-              Testimonials
-              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
-            </a>
-            <a href="#" className="relative text-sm font-semibold leading-6 text-gray-700 hover:text-indigo-600 transition-all duration-200 px-4 py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 group">
-              Blog
-              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
-            </a>
+          <div className="hidden lg:flex lg:gap-x-8">
+            {navLinks.map((link) => (
+              <a key={link.name} href={link.href} className="text-sm font-semibold leading-6 text-gray-600 hover:text-indigo-600 transition-colors">
+                {link.name}
+              </a>
+            ))}
           </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-3">
-            <button 
-              onClick={onSignUp}
-              className="text-sm font-semibold leading-6 text-gray-700 hover:text-indigo-600 transition-all duration-200 px-5 py-2.5 rounded-xl hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 border border-transparent hover:border-gray-200"
-            >
-              Log in
-            </button>
-            <button 
-              onClick={onGetStarted}
-              className="relative rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-700 hover:via-purple-700 hover:to-indigo-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 ring-1 ring-white/10"
-            >
-              <span className="relative z-10">Get started</span>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 opacity-0 hover:opacity-20 transition-opacity duration-300"></div>
-            </button>
+          <div className="hidden lg:flex lg:items-center lg:gap-x-4">
+            {isAuthenticated ? (
+                <button onClick={onGetStarted} className="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-indigo-600 text-white hover:text-slate-100 hover:bg-indigo-500 active:bg-indigo-800 active:text-indigo-100 focus-visible:outline-indigo-600 transition-all duration-300">
+                  <span>Dashboard</span>
+                  <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
+                </button>
+            ) : (
+              <>
+                <button onClick={onSignUp} className="text-sm font-semibold leading-6 text-gray-600 hover:text-indigo-600 transition-colors">
+                  Log in
+                </button>
+                <button onClick={onGetStarted} className="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-indigo-600 text-white hover:text-slate-100 hover:bg-indigo-500 active:bg-indigo-800 active:text-indigo-100 focus-visible:outline-indigo-600 transition-all duration-300">
+                  <span>Get started</span>
+                  <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
+                </button>
+              </>
+            )}
           </div>
         </nav>
+        {/* Mobile menu, show/hide based on menu open state. */}
+        {isMenuOpen && (
+          <div className="lg:hidden" role="dialog" aria-modal="true">
+            <div className="fixed inset-0 z-50" />
+            <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+              <div className="flex items-center justify-between">
+                <a href="#" className="-m-1.5 p-1.5">
+                  <span className="sr-only">Eisenhower Matrix</span>
+                  <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-md flex items-center justify-center">
+                    <CheckSquare className="w-5 h-5 text-white" />
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  className="-m-2.5 rounded-md p-2.5 text-gray-700"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="sr-only">Close menu</span>
+                  <X className="h-6 w-6" aria-hidden="true" />
+                </button>
+              </div>
+              <div className="mt-6 flow-root">
+                <div className="-my-6 divide-y divide-gray-500/10">
+                  <div className="space-y-2 py-6">
+                    {navLinks.map((link) => (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                      >
+                        {link.name}
+                      </a>
+                    ))}
+                  </div>
+                  <div className="py-6">
+                    {isAuthenticated ? (
+                      <button onClick={onGetStarted} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                        Go to Dashboard
+                      </button>
+                    ) : (
+                      <>
+                        <button onClick={onSignUp} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                          Log in
+                        </button>
+                        <button onClick={onGetStarted} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                          Get started
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* Hero Section */}
-      <Hero onGetStarted={onGetStarted} />
-      
-      {/* Features Section */}
-      <Features />
-      
-      {/* Testimonials Section */}
-      <div id="testimonials">
+      <main>
+        <Hero onGetStarted={onGetStarted} />
+        <Features />
         <Testimonials />
-      </div>
-      
-      {/* Pricing Section */}
-      <Pricing onSignUp={onSignUp} onUpgrade={onUpgrade} />
-      
-      {/* Footer */}
+        <Pricing onSignUp={onSignUp} onUpgrade={onUpgrade} />
+      </main>
+
       <Footer />
     </div>
   );

@@ -18,7 +18,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   return <>{children}</>;
 };
 
-// Public route that redirects to dashboard if already authenticated
+// Public route that redirects to dashboard if already authenticated (only for auth pages)
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   
@@ -56,13 +56,19 @@ const AppRouter: React.FC = () => {
       <Route 
         path="/" 
         element={
-          <PublicRoute>
+          user ? 
+            <LandingPage 
+              onGetStarted={() => window.location.href = '/dashboard'} 
+              onSignUp={() => window.location.href = '/dashboard'} 
+              onUpgrade={handleUpgrade}
+              isAuthenticated={true}
+            /> :
             <LandingPage 
               onGetStarted={handleGetStarted} 
               onSignUp={handleSignUp} 
-              onUpgrade={handleUpgrade} 
+              onUpgrade={handleUpgrade}
+              isAuthenticated={false}
             />
-          </PublicRoute>
         } 
       />
       <Route 

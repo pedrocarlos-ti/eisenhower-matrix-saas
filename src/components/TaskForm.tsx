@@ -54,6 +54,25 @@ const TaskForm: React.FC<TaskFormProps> = ({
     setTouched({});
   }, [initialTask, initialQuadrant, isOpen]);
 
+  // Add keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        if (Object.keys(errors).length === 0) {
+          handleSubmit(e as any);
+        }
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, errors, onClose]);
+
   // Validate a single field
   const validateField = (fieldName: string, value: any) => {
     const formData = getFormData();
@@ -184,20 +203,20 @@ const TaskForm: React.FC<TaskFormProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg border border-gray-100">
-        <div className="p-8">
-          <div className="flex items-center space-x-4 mb-8">
-            <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="card-gradient rounded-3xl shadow-2xl w-full max-w-lg border-2 border-white/60 animate-fade-in-scale">
+        <div className="p-10">
+          <div className="flex items-center space-x-4 mb-10">
+            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform duration-300">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-3xl font-black gradient-text">
               {initialTask ? 'Edit Task' : 'Create New Task'}
             </h2>
           </div>
           
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Title */}
             <div>
               <label htmlFor="title" className="block text-sm font-semibold text-gray-900 mb-3">
@@ -214,10 +233,10 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   }
                 }}
                 onBlur={() => handleBlur('title')}
-                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm ${
+                className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg backdrop-blur-sm font-medium ${
                   hasFieldError('title', errors) && touched.title
-                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                    : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
+                    : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
                 }`}
                 placeholder="Enter task title"
                 autoFocus
@@ -240,10 +259,10 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   }
                 }}
                 onBlur={() => handleBlur('description')}
-                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 resize-none text-gray-900 shadow-sm ${
+                className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 resize-none text-gray-900 shadow-lg backdrop-blur-sm font-medium ${
                   hasFieldError('description', errors) && touched.description
-                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                    : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
+                    : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
                 }`}
                 placeholder="Enter task description (optional)"
                 rows={3}
@@ -267,10 +286,10 @@ const TaskForm: React.FC<TaskFormProps> = ({
                     }
                   }}
                   onBlur={() => handleBlur('priority')}
-                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm appearance-none ${
+                  className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg appearance-none backdrop-blur-sm font-medium ${
                     hasFieldError('priority', errors) && touched.priority
-                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
+                      : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
                   }`}
                 >
                   <option value="high">High Priority</option>
@@ -295,10 +314,10 @@ const TaskForm: React.FC<TaskFormProps> = ({
                     }
                   }}
                   onBlur={() => handleBlur('dueDate')}
-                  className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm ${
+                  className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg backdrop-blur-sm font-medium ${
                     hasFieldError('dueDate', errors) && touched.dueDate
-                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
+                      : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
                   }`}
                 />
                 <ErrorMessage message={touched.dueDate ? getFieldError('dueDate', errors) : undefined} />
@@ -309,6 +328,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
             <div>
               <label htmlFor="quadrant" className="block text-sm font-semibold text-gray-900 mb-3">
                 Quadrant
+                {initialQuadrant && (
+                  <span className="ml-2 text-xs text-blue-600 font-medium">
+                    (Pre-selected)
+                  </span>
+                )}
               </label>
               <select
                 id="quadrant"
@@ -320,10 +344,12 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   }
                 }}
                 onBlur={() => handleBlur('quadrant')}
-                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm appearance-none ${
+                className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg appearance-none backdrop-blur-sm font-medium ${
                   hasFieldError('quadrant', errors) && touched.quadrant
-                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                    : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
+                    : initialQuadrant 
+                      ? 'border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500 bg-indigo-50/50'
+                      : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
                 }`}
               >
                 {quadrantOptions.map((option) => (
@@ -352,10 +378,10 @@ const TaskForm: React.FC<TaskFormProps> = ({
                   }
                 }}
                 onBlur={() => handleBlur('tags')}
-                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 shadow-sm ${
+                className={`w-full px-6 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-gray-900 shadow-lg backdrop-blur-sm font-medium ${
                   hasFieldError('tags', errors) && touched.tags
-                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                    : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500 bg-red-50/50'
+                    : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80'
                 }`}
                 placeholder="Enter tags separated by commas (optional)"
               />
@@ -363,21 +389,21 @@ const TaskForm: React.FC<TaskFormProps> = ({
             </div>
 
             {/* Actions */}
-            <div className="flex justify-end space-x-3 pt-6">
+            <div className="flex justify-end space-x-4 pt-8">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-3 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg border border-gray-200 transition-colors duration-200 font-medium shadow-sm"
+                className="btn-secondary-large transform hover:scale-105 transition-all duration-300"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={Object.keys(errors).length > 0}
-                className={`px-6 py-3 rounded-lg transition-colors duration-200 font-medium shadow-sm ${
+                className={`btn-primary-large transform hover:scale-105 transition-all duration-300 ${
                   Object.keys(errors).length > 0
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-blue-500 hover:bg-blue-600 text-white'
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
                 }`}
               >
                 {initialTask ? 'Update Task' : 'Create Task'}

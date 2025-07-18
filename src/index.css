@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,31 +6,26 @@
 
 @layer base {
   :root {
-    --background: 248 250 252%;
-    --foreground: 15 23 42%;
-    --card: 255 255 255%;
-    --card-foreground: 15 23 42%;
-    --popover: 255 255 255%;
-    --popover-foreground: 15 23 42%;
-    --primary: 255 87% 65%;
-    --primary-foreground: 255 255 255%;
-    --secondary: 241 245 249%;
-    --secondary-foreground: 15 23 42%;
-    --muted: 241 245 249%;
-    --muted-foreground: 100 116 139%;
-    --accent: 238 242 255%;
-    --accent-foreground: 67 56 202%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 255 255 255%;
-    --border: 226 232 240%;
-    --input: 226 232 240%;
-    --ring: 255 87% 65%;
-    --radius: 0.75rem;
-    --chart-1: 255 87% 65%;
-    --chart-2: 199 89% 48%;
-    --chart-3: 142 76% 36%;
-    --chart-4: 45 93% 47%;
-    --chart-5: 315 100% 47%;
+    --background: 248 250 252;
+    --foreground: 15 23 42;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
+    --primary: 94 23 235;
+    --primary-foreground: 255 255 255;
+    --secondary: 241 245 249;
+    --secondary-foreground: 15 23 42;
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    --accent: 241 245 249;
+    --accent-foreground: 15 23 42;
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 94 23 235;
+    --radius: 1rem;
   }
 
   .dark {
@@ -53,84 +48,36 @@
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
   }
 }
 
 @layer base {
   * {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    @apply border-border;
+    font-family: 'Inter', sans-serif;
   }
   body {
-    @apply bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 text-foreground min-h-screen;
-  }
-}
-
-@layer components {
-  .btn-primary-large {
-    @apply bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 hover:from-pink-600 hover:via-purple-600 hover:to-indigo-700 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 text-lg;
-  }
-  
-  .btn-secondary-large {
-    @apply bg-white/80 backdrop-blur-sm hover:bg-white text-slate-700 font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-white/20 hover:border-white/40 text-lg;
-  }
-  
-  .card-gradient {
-    @apply bg-gradient-to-br from-white via-white to-slate-50/50 backdrop-blur-sm border border-white/60 shadow-xl hover:shadow-2xl transition-all duration-300;
-  }
-  
-  .gradient-text {
-    @apply bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent;
+    @apply bg-background text-foreground;
   }
 }
 
 @layer utilities {
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--foreground) / 0.2) transparent;
   }
-  
-  @keyframes fadeInScale {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
   }
-  
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
   }
-  
-  .animate-fade-in-up {
-    animation: fadeInUp 0.6s ease-out forwards;
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--foreground) / 0.2);
+    border-radius: 3px;
   }
-  
-  .animate-fade-in-scale {
-    animation: fadeInScale 0.4s ease-out forwards;
-  }
-  
-  .animate-slide-in-right {
-    animation: slideInRight 0.5s ease-out forwards;
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--foreground) / 0.3);
   }
 }
