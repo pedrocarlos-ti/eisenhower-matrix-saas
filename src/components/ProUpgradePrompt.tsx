@@ -81,27 +81,27 @@ const ProUpgradePrompt: React.FC<ProUpgradePromptProps> = ({
 
   if (variant === 'banner') {
     return (
-      <div className="glass-effect border-b border-white/20 shadow-sm">
+      <div className="bg-white border-b border-solid border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
                 <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
               <div>
-                <p className="text-slate-900 font-semibold">
+                <p className="text-gray-900 font-semibold">
                   Upgrade to Priority Matrix Pro
                 </p>
-                <p className="text-slate-600 text-sm">
+                <p className="text-gray-600 text-sm">
                   {feature ? `Unlock ${feature} and more premium features` : 'Get cloud sync, team collaboration, and advanced analytics'}
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <button 
-                className="btn-primary text-sm"
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm transition-colors duration-200 text-sm font-medium border-solid border border-transparent"
                 onClick={onUpgrade}
               >
                 Get Pro Now
@@ -123,23 +123,23 @@ const ProUpgradePrompt: React.FC<ProUpgradePromptProps> = ({
 
   if (variant === 'inline') {
     return (
-      <div className="card p-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 border-indigo-200">
-        <div className="flex items-start space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+      <div className="bg-white rounded-lg p-6 border border-solid border-gray-200 shadow-md">
+        <div className="flex items-start space-x-6">
+          <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center shadow-md">
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">
               Ready for more powerful productivity?
             </h3>
-            <p className="text-slate-600 mb-4">
+            <p className="text-gray-600 mb-4">
               {feature ? `${feature} is a Pro feature. ` : ''}
               Upgrade to unlock cloud sync, team collaboration, and advanced analytics.
             </p>
             <button 
-              className="btn-primary"
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm transition-colors duration-200 font-medium border-solid border border-transparent"
               onClick={onUpgrade}
             >
               Upgrade to Pro
@@ -152,53 +152,53 @@ const ProUpgradePrompt: React.FC<ProUpgradePromptProps> = ({
 
   // Modal variant
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="card-gradient max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-3xl border-2 border-white/20 shadow-2xl">
-        <div className="p-10">
-          <div className="text-center mb-10">
-            <div className="w-24 h-24 bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-lg border border-solid border-gray-200 shadow-lg">
+        <div className="p-8">
+          <div className="text-center mb-8">
+            <div className="w-24 h-24 bg-indigo-600 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-md">
               <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
-            <h2 className="text-4xl font-bold gradient-text mb-4">
-              🚀 Upgrade to Priority Matrix Pro
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Upgrade to Priority Matrix Pro
             </h2>
-            <p className="text-slate-600 text-xl font-medium">
+            <p className="text-gray-600 text-lg font-medium">
               Supercharge your productivity with premium features
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-6 mb-10">
+          <div className="grid sm:grid-cols-2 gap-6 mb-8">
             {features.map((feature, index) => (
-              <div key={index} className="flex items-start space-x-4 p-6 bg-white/60 rounded-2xl shadow-lg border border-white/40">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+              <div key={index} className="flex items-start space-x-4 p-6 bg-white rounded-lg shadow-sm border border-solid border-gray-200">
+                <div className="w-12 h-12 bg-indigo-600 text-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
                   {feature.icon}
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 text-lg mb-1">{feature.title}</h4>
-                  <p className="text-slate-600">{feature.description}</p>
+                  <h4 className="font-bold text-gray-900 text-lg mb-1">{feature.title}</h4>
+                  <p className="text-gray-600">{feature.description}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-purple-100 via-pink-100 to-indigo-100 rounded-3xl p-8 mb-8 border-2 border-white/40 shadow-xl">
+          <div className="bg-gray-50 rounded-lg p-6 mb-6 border border-solid border-gray-200 shadow-sm">
             <div className="text-center">
-              <div className="text-5xl font-bold gradient-text mb-2">
-                $9<span className="text-2xl text-slate-600">/month</span>
+              <div className="text-4xl font-bold text-gray-900 mb-2">
+                $9<span className="text-xl text-gray-600">/month</span>
               </div>
-              <p className="text-slate-600 text-lg mb-6 font-medium">
-                Or $89/year (save 17%) 💰
+              <p className="text-gray-600 text-lg mb-6 font-medium">
+                Or $89/year (save 17%)
               </p>
               <button 
-                className="btn-primary-large w-full mb-4 text-xl"
+                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm transition-colors duration-200 w-full mb-4 text-lg font-medium border-solid border border-transparent"
                 onClick={onUpgrade}
               >
-                🚀 Start Your Pro Trial
+                Start Your Pro Trial
               </button>
-              <p className="text-sm text-slate-500">
-                ✨ 14-day free trial • Cancel anytime • No credit card required
+              <p className="text-sm text-gray-500">
+                14-day free trial • Cancel anytime • No credit card required
               </p>
             </div>
           </div>
@@ -206,7 +206,7 @@ const ProUpgradePrompt: React.FC<ProUpgradePromptProps> = ({
           <div className="flex justify-center">
             <button 
               onClick={handleClose}
-              className="text-slate-500 hover:text-slate-700 text-sm font-medium transition-colors"
+              className="text-gray-500 hover:text-gray-700 text-sm font-medium transition-colors"
             >
               Maybe later
             </button>
